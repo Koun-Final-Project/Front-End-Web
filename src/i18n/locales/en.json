@@ -1,0 +1,989 @@
+{
+  "brand": {
+    "name": "Kawn",
+    "subtitle": "Admin Panel",
+    "tagline": "Connecting donors with beneficiaries",
+    "description": "A smart and transparent platform ensuring donations reach those in need safely and seamlessly."
+  },
+  "common": {
+    "search": "Search",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "close": "Close",
+    "edit": "Edit",
+    "delete": "Delete",
+    "add": "Add",
+    "back": "Back",
+    "next": "Next",
+    "options": "Options",
+    "loading": "Loading…",
+    "empty": "No data to display.",
+    "done": "Done",
+    "or": "OR",
+    "live": "Live",
+    "yes": "Yes",
+    "no": "No",
+    "active": "Active",
+    "inactive": "Inactive",
+    "branch_one": "branch",
+    "branch_other": "branches",
+    "of": "of"
+  },
+  "fields": {
+    "users": {
+      "avatar": "Avatar",
+      "first_name": "First name",
+      "last_name": "Last name",
+      "username": "Username",
+      "phone": "Phone number",
+      "email": "Email address",
+      "password": "Password",
+      "gender": "Gender",
+      "birthday": "Date of birth"
+    },
+    "institutions": {
+      "name": "Institution name",
+      "description": "Description",
+      "logo": "Logo",
+      "owner": "Owner",
+      "email": "Email",
+      "phone": "Phone",
+      "type": "Type",
+      "is_active": "Active",
+      "attachments": "Attachments"
+    },
+    "branches": {
+      "name": "Branch name",
+      "description": "Description",
+      "institution": "Institution",
+      "email": "Branch email",
+      "phone": "Branch phone",
+      "is_main_branch": "Main branch"
+    },
+    "addresses": {
+      "city": "City",
+      "street": "Street",
+      "state": "State",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "details": "Address details"
+    },
+    "donations": {
+      "title": "Donation title",
+      "description": "Description",
+      "status": "Status",
+      "notes": "Notes",
+      "sent_at": "Sent at",
+      "sender_branch": "Sender branch",
+      "sender_user": "Sender user"
+    },
+    "donation_items": {
+      "name": "Item name",
+      "description": "Item description",
+      "quantity": "Total quantity",
+      "remaining_quantity": "Remaining quantity",
+      "item_type": "Item type",
+      "unit": "Unit",
+      "notes": "Item notes"
+    },
+    "donation_requests": {
+      "receiver_branch": "Receiver branch",
+      "receiver_user": "Receiver user",
+      "status": "Request status",
+      "notes": "Request notes"
+    },
+    "donation_request_items": {
+      "requested_quantity": "Requested quantity",
+      "approved_quantity": "Approved quantity",
+      "received_quantity": "Received quantity"
+    },
+    "deliveries": {
+      "status": "Delivery status",
+      "picked_at": "Picked up at",
+      "delivered_at": "Delivered at",
+      "delivery_person": "Delivery person",
+      "receiver": "Receiver"
+    }
+  },
+  "enums": {
+    "gender": {
+      "male": "Male",
+      "female": "Female"
+    },
+    "institution_type": {
+      "1": "Donor",
+      "2": "Charity",
+      "3": "Donor & Charity"
+    },
+    "donation_status": {
+      "-1": "Rejected",
+      "0": "Pending",
+      "1": "Approved"
+    },
+    "request_status": {
+      "-1": "Rejected",
+      "0": "Pending",
+      "1": "Approved"
+    },
+    "delivery_status": {
+      "0": "Pending",
+      "1": "Picked up",
+      "3": "In transit",
+      "4": "Delivered"
+    },
+    "item_type": {
+      "food": "Food",
+      "clothing": "Clothing",
+      "medical": "Medical",
+      "education": "Education",
+      "furniture": "Furniture",
+      "other": "Other"
+    },
+    "unit": {
+      "meal": "meal",
+      "basket": "basket",
+      "piece": "piece",
+      "pack": "pack",
+      "book": "book",
+      "carton": "carton",
+      "bag": "bag",
+      "parcel": "parcel"
+    }
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "donations": "Donations",
+    "myDonations": "My Donations",
+    "availableDonations": "Available Donations",
+    "receivedRequests": "Received Requests",
+    "myRequests": "My Requests",
+    "institutions": "Institutions",
+    "beneficiaries": "Beneficiaries",
+    "requests": "Requests",
+    "tracking": "Delivery Tracking",
+    "delivered": "Delivered",
+    "settings": "Settings",
+    "collapse": "Collapse menu",
+    "logout": "Log out"
+  },
+  "role": {
+    "label": "Role",
+    "demo": "Demo Role",
+    "demoBadge": "Preview mode",
+    "title": "Switch institution role",
+    "subtitle": "Instantly preview how the UI changes for each role.",
+    "descriptions": {
+      "1": "Post donations and review incoming requests.",
+      "2": "Browse donations and submit requests.",
+      "3": "Full access to donor and charity features."
+    }
+  },
+  "header": {
+    "search": "Search for a donor, institution or request…",
+    "notifications": "Notifications",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Log out",
+    "role": "Super Admin",
+    "userName": "Abdullah",
+    "userFullName": "Abdullah Al-Rashed",
+    "toggleTheme": "Toggle theme"
+  },
+  "lang": {
+    "label": "Language",
+    "ar": "Arabic",
+    "en": "English"
+  },
+  "auth": {
+    "meta": {
+      "title": "Kawn · Sign In",
+      "description": "Kawn connects donors with beneficiaries — sign in or create a new account."
+    },
+    "tabs": { "login": "Sign In", "register": "Sign Up" },
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to continue your giving journey.",
+      "submit": "Sign In",
+      "remember": "Remember me",
+      "forgot": "Forgot your password?",
+      "identifier": "Email or username"
+    },
+    "register": {
+      "title": "Join Kawn",
+      "subtitle": "Create your account and start making an impact today.",
+      "submit": "Create Account"
+    },
+    "google": "Continue with Google",
+    "terms": "By continuing, you agree to our",
+    "termsLink": "Terms & Conditions",
+    "and": "and",
+    "privacyLink": "Privacy Policy",
+    "hero": {
+      "badge": "KAWN · كون",
+      "stats": {
+        "donors": "Active donors",
+        "beneficiaries": "Beneficiaries",
+        "delivered": "Donations delivered"
+      }
+    }
+  },
+  "dashboard": {
+    "meta": {
+      "title": "Kawn · Dashboard",
+      "description": "Super admin dashboard for Kawn — monitor donations, institutions and requests."
+    },
+    "welcome": "Welcome back 👋",
+    "title": "Super Admin Dashboard",
+    "subtitle": "A complete overview of platform performance, incoming donations, and active institutions throughout the day.",
+    "dailyReport": "Today's report",
+    "cta": {
+      "postDonation": "Post a Donation",
+      "makeRequest": "Make a Request"
+    },
+    "stats": {
+      "totalDonations": "Total Donations",
+      "activeInstitutions": "Active Institutions",
+      "pendingRequests": "Pending Requests",
+      "delivered": "Delivered"
+    },
+    "chart": { "title": "Donations trend", "range": "Last 12 months" },
+    "activity": {
+      "title": "Latest activity",
+      "items": [
+        { "t": "New donation worth 5,000 SAR", "s": "2 minutes ago" },
+        { "t": "Al-Khair institution joined", "s": "12 minutes ago" },
+        { "t": "Request #4821 delivered", "s": "1 hour ago" },
+        { "t": "New request under review", "s": "3 hours ago" }
+      ]
+    }
+  },
+  "institutions": {
+    "meta": {
+      "title": "Kawn · Institutions & Branches",
+      "description": "Manage donor and charity institutions, their branches and addresses in Kawn."
+    },
+    "eyebrow": "Institutions Management",
+    "title": "Institutions & Branches",
+    "subtitle": "Browse and manage donor and charity institutions, their branches and addresses in one place.",
+    "new": "New Institution",
+    "searchPlaceholder": "Search by name, owner or email…",
+    "advancedFilter": "Advanced filter",
+    "tabs": { "all": "All", "1": "Donors", "2": "Charities", "3": "Both" },
+    "columns": {
+      "institution": "Institution",
+      "owner": "Owner",
+      "type": "Type",
+      "status": "Status",
+      "branches": "Branches",
+      "actions": "Actions"
+    },
+    "showBranches": "Show branches",
+    "hideBranches": "Hide branches",
+    "branchesTitle": "Branches & Addresses",
+    "addBranch": "Add branch",
+    "mainBranchBadge": "Main branch",
+    "noDescription": "No description provided.",
+    "attachmentsLabel": "Attachments",
+    "noAttachments": "No attachments uploaded.",
+    "coords": "Coordinates",
+    "empty": "No institutions match your search.",
+    "list": [
+      {
+        "id": "INS-001",
+        "name": "Al-Birr Charity Foundation",
+        "description": "A leading charity organization focused on food aid, orphan sponsorship and seasonal relief campaigns across the Kingdom.",
+        "logo": null,
+        "owner": "Abdulaziz Al-Harthi",
+        "email": "info@albirr.org",
+        "phone": "+966 11 234 5000",
+        "type": 2,
+        "is_active": true,
+        "attachments": ["commercial_registration.pdf", "ngo_license.pdf"],
+        "branches": [
+          {
+            "id": "BR-101",
+            "name": "Headquarters",
+            "description": "Main administrative headquarters.",
+            "email": "hq@albirr.org",
+            "phone": "+966 11 234 5678",
+            "is_main_branch": true,
+            "address": { "city": "Riyadh", "state": "Riyadh Region", "street": "Al-Olaya St. - Al-Wurud District", "latitude": 24.7136, "longitude": 46.6753, "details": "Building 12, 3rd floor" }
+          },
+          {
+            "id": "BR-102",
+            "name": "Jeddah Branch",
+            "description": "Western region operations and distribution.",
+            "email": "jeddah@albirr.org",
+            "phone": "+966 12 345 6789",
+            "is_main_branch": false,
+            "address": { "city": "Jeddah", "state": "Makkah Region", "street": "Tahlia St. - Al-Zahraa District", "latitude": 21.5433, "longitude": 39.1728, "details": "Adjacent to Tahlia mall" }
+          }
+        ]
+      },
+      {
+        "id": "INS-002",
+        "name": "Al-Amal Trading Company",
+        "description": "A corporate donor specialising in food and consumer goods in-kind contributions.",
+        "logo": null,
+        "owner": "Noura Al-Subaie",
+        "email": "donate@alamal.sa",
+        "phone": "+966 11 987 0000",
+        "type": 1,
+        "is_active": true,
+        "attachments": ["company_profile.pdf"],
+        "branches": [
+          {
+            "id": "BR-201",
+            "name": "Main Office",
+            "description": "Corporate HQ — donation coordination.",
+            "email": "office@alamal.sa",
+            "phone": "+966 11 987 6543",
+            "is_main_branch": true,
+            "address": { "city": "Riyadh", "state": "Riyadh Region", "street": "King Abdullah Rd. - Al-Aqiq District", "latitude": 24.7741, "longitude": 46.6386, "details": "Tower B, 5th floor" }
+          }
+        ]
+      },
+      {
+        "id": "INS-003",
+        "name": "Ihsan Humanitarian Group",
+        "description": "Humanitarian group operating both as donor and charity, supporting integrated relief programs.",
+        "logo": null,
+        "owner": "Mohammed Al-Zahrani",
+        "email": "contact@ihsan.org",
+        "phone": "+966 12 555 0000",
+        "type": 3,
+        "is_active": true,
+        "attachments": ["license.pdf", "annual_report.pdf"],
+        "branches": [
+          {
+            "id": "BR-301",
+            "name": "Main Center",
+            "description": "Main operations center in the Holy Capital.",
+            "email": "main@ihsan.org",
+            "phone": "+966 12 555 1234",
+            "is_main_branch": true,
+            "address": { "city": "Makkah", "state": "Makkah Region", "street": "Ibrahim Al-Khalil St. - Al-Aziziyah District", "latitude": 21.3891, "longitude": 39.8579, "details": "Service entrance from the back" }
+          },
+          {
+            "id": "BR-302",
+            "name": "Madinah Branch",
+            "description": "Regional branch serving Madinah.",
+            "email": "madinah@ihsan.org",
+            "phone": "+966 14 555 2345",
+            "is_main_branch": false,
+            "address": { "city": "Madinah", "state": "Madinah Region", "street": "King Abdulaziz Rd. - Al-Anbariyah District", "latitude": 24.4708, "longitude": 39.6126, "details": "Ground floor" }
+          }
+        ]
+      },
+      {
+        "id": "INS-004",
+        "name": "Orphan Sponsorship Society",
+        "description": "Charity dedicated to sponsoring orphans and providing educational and healthcare support.",
+        "logo": null,
+        "owner": "Hind Al-Otaibi",
+        "email": "info@kafalah.org",
+        "phone": "+966 11 222 0000",
+        "type": 2,
+        "is_active": false,
+        "attachments": [],
+        "branches": [
+          {
+            "id": "BR-401",
+            "name": "Headquarters",
+            "description": "Main administrative office.",
+            "email": "hq@kafalah.org",
+            "phone": "+966 11 222 3344",
+            "is_main_branch": true,
+            "address": { "city": "Riyadh", "state": "Riyadh Region", "street": "Prince Mohammed bin Abdulaziz St. - Al-Sulaymaniyah", "latitude": 24.7029, "longitude": 46.6852, "details": "Building 8" }
+          }
+        ]
+      }
+    ]
+  },
+  "beneficiaries": {
+    "meta": {
+      "title": "Kawn · Beneficiaries Directory",
+      "description": "Directory of charity/beneficiary institutions with branches, addresses and contact details."
+    },
+    "eyebrow": "Beneficiaries Directory",
+    "title": "Beneficiaries Directory",
+    "subtitle": "Browse charity and beneficiary institutions, filter by status and inspect their branches and addresses.",
+    "totalLabel": "Total Beneficiaries",
+    "searchPlaceholder": "Search by name, email, phone or city…",
+    "tabs": { "all": "All", "active": "Active", "inactive": "Inactive" },
+    "columns": {
+      "institution": "Institution",
+      "email": "Email",
+      "phone": "Phone",
+      "city": "City / Street",
+      "status": "Status"
+    },
+    "expand": "Expand row",
+    "collapse": "Collapse row",
+    "branchesTitle": "Branches & Addresses",
+    "mainBranchBadge": "Main branch",
+    "empty": "No beneficiaries match your search."
+  },
+  "donations": {
+    "meta": {
+      "title": "Kawn · Donations Board",
+      "description": "Donations board to manage supply and demand between donors and charities in Kawn."
+    },
+    "eyebrow": "Supply & Demand",
+    "title": "Donations Board",
+    "subtitle": "Browse available donations and send requests to institutions effortlessly.",
+    "new": "New Donation",
+    "searchPlaceholder": "Search donations or senders…",
+    "view": { "kanban": "Board", "list": "List" },
+    "columns": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "pendingHint": "Awaiting admin approval",
+      "approvedHint": "Available to request now",
+      "rejectedHint": "Did not meet criteria"
+    },
+    "card": {
+      "remaining": "Remaining",
+      "of": "of",
+      "items": "Items",
+      "request": "Request Donation",
+      "exhausted": "Quantity exhausted",
+      "unavailable": "Unavailable",
+      "notesLabel": "Notes"
+    },
+    "emptyColumn": "No donations in this section.",
+    "modal": {
+      "eyebrow": "Donation Request",
+      "from": "from",
+      "item": "Donation item",
+      "requested_quantity": "Requested quantity",
+      "ofTotal": "{{pct}}% of total donation",
+      "notes": "Request notes",
+      "optional": "(optional)",
+      "notesPlaceholder": "Add details that help the donor respond to your request…",
+      "cancel": "Cancel",
+      "submit": "Confirm Request",
+      "successTitle": "Your request was sent",
+      "successBody": "You requested {{qty}} {{unit}} of «{{title}}». You will be notified upon approval.",
+      "close": "Close"
+    },
+    "list": [
+      {
+        "id": "DN-1042",
+        "title": "Ready iftar meals",
+        "description": "Hot, ready-to-serve iftar meals prepared daily for distribution.",
+        "status": 0,
+        "notes": "Please pick up before 4 PM to maintain freshness.",
+        "sent_at": "2026-06-16T09:30:00",
+        "sender_branch": "Al-Amal Restaurants — Riyadh Branch",
+        "sender_city": "Riyadh",
+        "items": [
+          { "id": "DI-1", "name": "Iftar meal box", "description": "Rice, chicken and salad.", "quantity": 500, "remaining_quantity": 320, "item_type": "food", "unit": "meal", "notes": "Halal certified." }
+        ]
+      },
+      {
+        "id": "DN-1041",
+        "title": "Monthly food baskets",
+        "description": "Standard family food baskets covering basic monthly needs.",
+        "status": 1,
+        "notes": "",
+        "sent_at": "2026-06-15T14:10:00",
+        "sender_branch": "Al-Birr Foundation — Headquarters",
+        "sender_city": "Jeddah",
+        "items": [
+          { "id": "DI-2", "name": "Family food basket", "description": "Rice, oil, sugar, flour, dates.", "quantity": 200, "remaining_quantity": 80, "item_type": "food", "unit": "basket", "notes": "" }
+        ]
+      },
+      {
+        "id": "DN-1040",
+        "title": "Children winter clothes",
+        "description": "Brand-new winter clothing pieces for children aged 4–12.",
+        "status": 0,
+        "notes": "",
+        "sent_at": "2026-06-12T10:00:00",
+        "sender_branch": "Al-Noor Stores — Dammam Branch",
+        "sender_city": "Dammam",
+        "items": [
+          { "id": "DI-3", "name": "Winter jacket", "description": "Assorted sizes for children.", "quantity": 350, "remaining_quantity": 350, "item_type": "clothing", "unit": "piece", "notes": "" }
+        ]
+      },
+      {
+        "id": "DN-1039",
+        "title": "Chronic medications",
+        "description": "Medications for chronic illnesses with valid expiry dates.",
+        "status": 1,
+        "notes": "Requires licensed pharmacy receiver.",
+        "sent_at": "2026-06-11T08:20:00",
+        "sender_branch": "Al-Shifa Pharmacies — Al-Olaya Branch",
+        "sender_city": "Riyadh",
+        "items": [
+          { "id": "DI-4", "name": "Medication pack", "description": "Various chronic-illness medications.", "quantity": 120, "remaining_quantity": 45, "item_type": "medical", "unit": "pack", "notes": "" }
+        ]
+      },
+      {
+        "id": "DN-1038",
+        "title": "School textbooks",
+        "description": "School-curriculum textbooks for primary and intermediate stages.",
+        "status": 1,
+        "notes": "",
+        "sent_at": "2026-06-10T12:00:00",
+        "sender_branch": "Knowledge Bookstores — Jeddah Branch",
+        "sender_city": "Jeddah",
+        "items": [
+          { "id": "DI-5", "name": "School textbook", "description": "Assorted titles.", "quantity": 800, "remaining_quantity": 0, "item_type": "education", "unit": "book", "notes": "" }
+        ]
+      },
+      {
+        "id": "DN-1037",
+        "title": "Used home furniture",
+        "description": "Lightly used home furniture in good condition.",
+        "status": -1,
+        "notes": "Rejected — does not match current beneficiary needs.",
+        "sent_at": "2026-06-09T15:00:00",
+        "sender_branch": "Al-Amal Company — Main Office",
+        "sender_city": "Riyadh",
+        "items": [
+          { "id": "DI-6", "name": "Furniture piece", "description": "Sofas, tables and chairs.", "quantity": 40, "remaining_quantity": 40, "item_type": "furniture", "unit": "piece", "notes": "" }
+        ]
+      }
+    ]
+  },
+  "tracking": {
+    "meta": {
+      "title": "Kawn · Delivery Tracking",
+      "description": "Track donation status from pickup to delivery in real-time."
+    },
+    "back": "Back to requests",
+    "title": "Delivery Tracking",
+    "subtitle": "Track request status moment by moment from pickup to delivery.",
+    "meta_card": {
+      "request": "Request #",
+      "requestValue": "REQ-2026-00412",
+      "donation": "Donation",
+      "donationValue": "Ramadan food baskets",
+      "receiver_branch": "Receiver branch",
+      "receiver_branchValue": "Al-Birr Foundation — Headquarters"
+    },
+    "items": {
+      "title": "Request items",
+      "subtitle": "Quantity breakdown per item.",
+      "columns": {
+        "item": "Item",
+        "requested": "Requested",
+        "approved": "Approved",
+        "received": "Received"
+      },
+      "list": [
+        { "name": "Family food basket", "unit": "basket", "requested_quantity": 50, "approved_quantity": 50, "received_quantity": 30 },
+        { "name": "Bottled water carton", "unit": "carton", "requested_quantity": 20, "approved_quantity": 15, "received_quantity": 0 }
+      ]
+    },
+    "stagesTitle": "Delivery stages",
+    "live": "Live",
+    "inProgress": "In progress",
+    "stages": {
+      "0": "Pending",
+      "1": "Picked up",
+      "3": "In transit",
+      "4": "Delivered"
+    },
+    "driver": {
+      "badge": "Delivery person",
+      "first_name": "Khaled",
+      "last_name": "Al-Mansour",
+      "phone": "+966 55 412 0987",
+      "call": "Call",
+      "chat": "Message"
+    },
+    "receiver": {
+      "label": "Receiver",
+      "first_name": "Sara",
+      "last_name": "Al-Qahtani",
+      "phone": "+966 50 222 3344"
+    }
+  },
+  "requests": {
+    "meta": {
+      "title": "Kawn · Donation Requests",
+      "description": "Review and manage donation requests submitted by beneficiaries in Kawn."
+    },
+    "eyebrow": "Beneficiaries & Requests",
+    "title": "Donation Requests",
+    "subtitle": "Review incoming requests from beneficiaries, approve quantities and track fulfillment.",
+    "new": "New Request",
+    "searchPlaceholder": "Search by beneficiary, item or request ID…",
+    "tabs": {
+      "all": "All",
+      "0": "Pending",
+      "1": "Approved",
+      "-1": "Rejected"
+    },
+    "columns": {
+      "id": "Request",
+      "beneficiary": "Beneficiary",
+      "item": "Requested item",
+      "date": "Date",
+      "progress": "Quantity progress",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "quantities": {
+      "requested": "Requested",
+      "approved": "Approved",
+      "received": "Received",
+      "shortRequested": "Req",
+      "shortApproved": "App",
+      "shortReceived": "Rec",
+      "of": "of"
+    },
+    "actions": {
+      "approve": "Approve",
+      "reject": "Reject",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "reset": "Reset",
+      "expand": "Show details",
+      "collapse": "Hide details"
+    },
+    "details": {
+      "notesTitle": "Request notes",
+      "notesEmpty": "No notes were added to this request.",
+      "receiverTitle": "Receiver user",
+      "receiverBranchTitle": "Receiver branch",
+      "phone": "Phone",
+      "email": "Email",
+      "role": "Role"
+    },
+    "empty": "No requests match your filters.",
+    "list": [
+      {
+        "id": "REQ-2026-00412",
+        "status": 0,
+        "date": "2026-06-18T09:30:00",
+        "notes": "Please prepare for pickup Friday morning; the branch has volunteers ready to distribute right after Jumu'ah.",
+        "receiver_branch": "Al-Birr Foundation — Headquarters",
+        "receiver_branch_city": "Riyadh",
+        "receiver_user": {
+          "first_name": "Sara",
+          "last_name": "Al-Qahtani",
+          "role": "Branch Coordinator",
+          "phone": "+966 50 222 3344",
+          "email": "sara.q@albirr.org"
+        },
+        "item": {
+          "name": "Family food basket",
+          "unit": "basket",
+          "type": "food",
+          "requested_quantity": 50,
+          "approved_quantity": 50,
+          "received_quantity": 30
+        }
+      },
+      {
+        "id": "REQ-2026-00411",
+        "status": 1,
+        "date": "2026-06-17T14:05:00",
+        "notes": "Approved with reduced quantity — remaining stock reserved for a partner charity.",
+        "receiver_branch": "Ihsan Humanitarian Group — Main Center",
+        "receiver_branch_city": "Makkah",
+        "receiver_user": {
+          "first_name": "Mohammed",
+          "last_name": "Al-Zahrani",
+          "role": "Operations Manager",
+          "phone": "+966 55 100 2233",
+          "email": "m.zahrani@ihsan.org"
+        },
+        "item": {
+          "name": "Bottled water carton",
+          "unit": "carton",
+          "type": "food",
+          "requested_quantity": 20,
+          "approved_quantity": 15,
+          "received_quantity": 15
+        }
+      },
+      {
+        "id": "REQ-2026-00410",
+        "status": 0,
+        "date": "2026-06-16T11:20:00",
+        "notes": "",
+        "receiver_branch": "Orphan Sponsorship Society — Headquarters",
+        "receiver_branch_city": "Riyadh",
+        "receiver_user": {
+          "first_name": "Hind",
+          "last_name": "Al-Otaibi",
+          "role": "Program Lead",
+          "phone": "+966 55 908 7766",
+          "email": "hind.o@kafalah.org"
+        },
+        "item": {
+          "name": "Winter jacket",
+          "unit": "piece",
+          "type": "clothing",
+          "requested_quantity": 120,
+          "approved_quantity": 0,
+          "received_quantity": 0
+        }
+      },
+      {
+        "id": "REQ-2026-00409",
+        "status": -1,
+        "date": "2026-06-15T08:40:00",
+        "notes": "Rejected — beneficiary already served in the same distribution cycle.",
+        "receiver_branch": "Al-Amal Trading Company — Main Office",
+        "receiver_branch_city": "Riyadh",
+        "receiver_user": {
+          "first_name": "Noura",
+          "last_name": "Al-Subaie",
+          "role": "CSR Officer",
+          "phone": "+966 55 776 5544",
+          "email": "noura.s@alamal.sa"
+        },
+        "item": {
+          "name": "School textbook",
+          "unit": "book",
+          "type": "education",
+          "requested_quantity": 200,
+          "approved_quantity": 0,
+          "received_quantity": 0
+        }
+      },
+      {
+        "id": "REQ-2026-00408",
+        "status": 1,
+        "date": "2026-06-14T16:15:00",
+        "notes": "Delivery in progress — driver assigned.",
+        "receiver_branch": "Al-Birr Foundation — Jeddah Branch",
+        "receiver_branch_city": "Jeddah",
+        "receiver_user": {
+          "first_name": "Abdulaziz",
+          "last_name": "Al-Harthi",
+          "role": "Branch Manager",
+          "phone": "+966 55 321 4455",
+          "email": "a.harthi@albirr.org"
+        },
+        "item": {
+          "name": "Medication pack",
+          "unit": "pack",
+          "type": "medical",
+          "requested_quantity": 40,
+          "approved_quantity": 40,
+          "received_quantity": 25
+        }
+      }
+    ]
+  },
+  "profile": {
+    "meta": {
+      "title": "Kawn · My Profile",
+      "description": "Manage your personal information, security settings and institution memberships."
+    },
+    "save": "Save changes",
+    "changeAvatar": "Change profile picture",
+    "personal": {
+      "title": "Personal information",
+      "subtitle": "Update the details associated with your account.",
+      "badge": "Account"
+    },
+    "security": {
+      "title": "Change password",
+      "subtitle": "Use a strong password you don't use elsewhere.",
+      "current": "Current password",
+      "new": "New password",
+      "confirm": "Confirm new password",
+      "update": "Update password",
+      "tip": "Use 8+ characters with letters, numbers and symbols.",
+      "strength": {
+        "veryWeak": "Very weak",
+        "weak": "Weak",
+        "fair": "Fair",
+        "strong": "Strong",
+        "veryStrong": "Very strong"
+      }
+    },
+    "institutions": {
+      "title": "My institutions",
+      "subtitle": "Institutions you are a member of, with your role in each.",
+      "joined": "Joined",
+      "roles": {
+        "admin": "Administrator",
+        "staff": "Staff member"
+      },
+      "list": [
+        { "id": "INS-001", "name": "Al-Birr Charity Foundation", "type": 2, "role": "admin", "city": "Riyadh", "joined": "2024-02-15" },
+        { "id": "INS-002", "name": "Al-Amal Trading Company", "type": 1, "role": "staff", "city": "Riyadh", "joined": "2024-06-01" },
+        { "id": "INS-003", "name": "Ihsan Humanitarian Group", "type": 3, "role": "staff", "city": "Makkah", "joined": "2025-01-20" }
+      ]
+    }
+  },
+  "errors": {
+    "notFoundTitle": "Page not found",
+    "notFoundBody": "The page you're looking for doesn't exist or has been moved.",
+    "goHome": "Go home",
+    "errorTitle": "This page didn't load",
+    "errorBody": "Something went wrong on our end. You can try refreshing or head back home.",
+    "tryAgain": "Try again"
+  },
+  "settingsPage": {
+    "meta": {
+      "title": "Kawn · Settings",
+      "description": "Manage app preferences, item types, units and regions."
+    },
+    "title": "System Settings",
+    "subtitle": "Fine-tune your workspace, catalogues and geography.",
+    "tabs": {
+      "general": "General Settings",
+      "itemTypes": "Item Types",
+      "units": "Units",
+      "regions": "Regions / States"
+    },
+    "general": {
+      "title": "App Preferences",
+      "subtitle": "Personalise how Kawn looks and speaks to you.",
+      "theme": "Theme",
+      "themeHint": "Choose your preferred visual mode.",
+      "themes": { "light": "Light", "dark": "Dark" },
+      "language": "Default Language",
+      "languageHint": "Interface language across the platform."
+    },
+    "itemTypes": {
+      "title": "Donation Categories",
+      "subtitle": "Standard categories used across donations and requests.",
+      "add": "Add New Type",
+      "name": "Category name",
+      "empty": "No item types yet. Add your first category.",
+      "samples": {
+        "food": "Food",
+        "clothes": "Clothes",
+        "medicine": "Medicine",
+        "school": "School Supplies"
+      }
+    },
+    "units": {
+      "title": "Measurement Units",
+      "subtitle": "Units used to quantify donated items.",
+      "add": "Add New Unit",
+      "name": "Unit name",
+      "abbr": "Abbreviation",
+      "empty": "No units defined. Add your first unit.",
+      "samples": {
+        "box":   { "name": "Box",    "abbr": "bx" },
+        "kg":    { "name": "Kilogram","abbr": "kg" },
+        "piece": { "name": "Piece",  "abbr": "pc" },
+        "liter": { "name": "Liter",  "abbr": "L"  }
+      }
+    },
+    "regions": {
+      "title": "Regions & States",
+      "subtitle": "Geographic regions used for institutions and delivery.",
+      "add": "Add New Region",
+      "name": "Region name",
+      "code": "Code",
+      "empty": "No regions yet. Add your first region.",
+      "samples": {
+        "riyadh": "Riyadh",
+        "mecca": "Makkah",
+        "eastern": "Eastern Province",
+        "madinah": "Madinah"
+    }
+  },
+  "delivered": {
+    "meta": {
+      "title": "Kawn · Delivered Requests",
+      "description": "Archive of fully delivered donation operations with delivery timestamps and quantity summaries."
+    },
+    "eyebrow": "Logistics Archive",
+    "title": "Delivered Requests",
+    "subtitle": "Browse completed donation deliveries. Every item tracked from pickup to final hand-off.",
+    "totalLabel": "Total Delivered",
+    "searchPlaceholder": "Search by beneficiary, item or delivery ID…",
+    "statusBadge": "Delivered",
+    "quantityLabel": "Received / Requested",
+    "pickedAtLabel": "Picked up",
+    "deliveredAtLabel": "Delivered at",
+    "empty": "No delivered requests match your search.",
+    "list": [
+      {
+        "id": "DEL-2026-001",
+        "beneficiary_name": "Al-Birr Charity Foundation",
+        "beneficiary_branch": "Headquarters",
+        "beneficiary_city": "Riyadh",
+        "item_name": "Family food basket",
+        "item_type": "food",
+        "unit": "basket",
+        "requested_quantity": 50,
+        "received_quantity": 50,
+        "picked_at": "2026-06-13T09:30:00",
+        "delivered_at": "2026-06-13T14:15:00"
+      },
+      {
+        "id": "DEL-2026-002",
+        "beneficiary_name": "Ihsan Humanitarian Group",
+        "beneficiary_branch": "Main Center",
+        "beneficiary_city": "Makkah",
+        "item_name": "Bottled water carton",
+        "item_type": "food",
+        "unit": "carton",
+        "requested_quantity": 15,
+        "received_quantity": 15,
+        "picked_at": "2026-06-12T08:00:00",
+        "delivered_at": "2026-06-12T11:45:00"
+      },
+      {
+        "id": "DEL-2026-003",
+        "beneficiary_name": "Orphan Sponsorship Society",
+        "beneficiary_branch": "Headquarters",
+        "beneficiary_city": "Riyadh",
+        "item_name": "Winter jacket",
+        "item_type": "clothing",
+        "unit": "piece",
+        "requested_quantity": 120,
+        "received_quantity": 120,
+        "picked_at": "2026-06-10T10:20:00",
+        "delivered_at": "2026-06-10T16:30:00"
+      },
+      {
+        "id": "DEL-2026-004",
+        "beneficiary_name": "Al-Birr Charity Foundation",
+        "beneficiary_branch": "Jeddah Branch",
+        "beneficiary_city": "Jeddah",
+        "item_name": "Medication pack",
+        "item_type": "medical",
+        "unit": "pack",
+        "requested_quantity": 40,
+        "received_quantity": 40,
+        "picked_at": "2026-06-09T07:45:00",
+        "delivered_at": "2026-06-09T12:00:00"
+      },
+      {
+        "id": "DEL-2026-005",
+        "beneficiary_name": "Ihsan Humanitarian Group",
+        "beneficiary_branch": "Madinah Branch",
+        "beneficiary_city": "Madinah",
+        "item_name": "School textbook",
+        "item_type": "education",
+        "unit": "book",
+        "requested_quantity": 200,
+        "received_quantity": 200,
+        "picked_at": "2026-06-08T09:00:00",
+        "delivered_at": "2026-06-08T15:20:00"
+      },
+      {
+        "id": "DEL-2026-006",
+        "beneficiary_name": "Al-Birr Charity Foundation",
+        "beneficiary_branch": "Headquarters",
+        "beneficiary_city": "Riyadh",
+        "item_name": "Iftar meal box",
+        "item_type": "food",
+        "unit": "meal",
+        "requested_quantity": 300,
+        "received_quantity": 300,
+        "picked_at": "2026-06-07T11:00:00",
+        "delivered_at": "2026-06-07T13:45:00"
+      }
+    ]
+  }
+}
+}

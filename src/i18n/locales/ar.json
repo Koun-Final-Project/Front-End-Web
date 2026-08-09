@@ -1,0 +1,985 @@
+{
+  "brand": {
+    "name": "كون",
+    "subtitle": "لوحة المشرف",
+    "tagline": "نظام لربط المتبرعين بالمستفيدين",
+    "description": "منصة تقنية ذكية وشفافة تضمن وصول التبرعات لمستحقيها بسهولة وأمان."
+  },
+  "common": {
+    "search": "بحث",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "close": "إغلاق",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "add": "إضافة",
+    "back": "رجوع",
+    "next": "التالي",
+    "options": "خيارات",
+    "loading": "جارٍ التحميل…",
+    "empty": "لا توجد بيانات لعرضها.",
+    "done": "تم",
+    "or": "أو",
+    "live": "حيّ",
+    "yes": "نعم",
+    "no": "لا",
+    "active": "نشط",
+    "inactive": "غير نشط",
+    "branch_one": "فرع",
+    "branch_other": "فرع",
+    "of": "من"
+  },
+  "fields": {
+    "users": {
+      "avatar": "الصورة الشخصية",
+      "first_name": "الاسم الأول",
+      "last_name": "اسم العائلة",
+      "username": "اسم المستخدم",
+      "phone": "رقم الجوال",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "gender": "الجنس",
+      "birthday": "تاريخ الميلاد"
+    },
+    "institutions": {
+      "name": "اسم المؤسسة",
+      "description": "الوصف",
+      "logo": "الشعار",
+      "owner": "المالك",
+      "email": "البريد الإلكتروني",
+      "phone": "رقم الهاتف",
+      "type": "النوع",
+      "is_active": "نشطة",
+      "attachments": "المرفقات"
+    },
+    "branches": {
+      "name": "اسم الفرع",
+      "description": "وصف الفرع",
+      "institution": "المؤسسة",
+      "email": "بريد الفرع",
+      "phone": "هاتف الفرع",
+      "is_main_branch": "الفرع الرئيسي"
+    },
+    "addresses": {
+      "city": "المدينة",
+      "street": "الشارع",
+      "state": "المنطقة",
+      "latitude": "خط العرض",
+      "longitude": "خط الطول",
+      "details": "تفاصيل العنوان"
+    },
+    "donations": {
+      "title": "عنوان التبرع",
+      "description": "الوصف",
+      "status": "الحالة",
+      "notes": "ملاحظات",
+      "sent_at": "تاريخ الإرسال",
+      "sender_branch": "الفرع المُرسِل",
+      "sender_user": "المُرسِل"
+    },
+    "donation_items": {
+      "name": "اسم العنصر",
+      "description": "وصف العنصر",
+      "quantity": "الكمية الإجمالية",
+      "remaining_quantity": "الكمية المتبقية",
+      "item_type": "نوع العنصر",
+      "unit": "الوحدة",
+      "notes": "ملاحظات العنصر"
+    },
+    "donation_requests": {
+      "receiver_branch": "الفرع المستلم",
+      "receiver_user": "المستلم",
+      "status": "حالة الطلب",
+      "notes": "ملاحظات الطلب"
+    },
+    "donation_request_items": {
+      "requested_quantity": "الكمية المطلوبة",
+      "approved_quantity": "الكمية المعتمدة",
+      "received_quantity": "الكمية المستلمة"
+    },
+    "deliveries": {
+      "status": "حالة التسليم",
+      "picked_at": "وقت الاستلام",
+      "delivered_at": "وقت التسليم",
+      "delivery_person": "مندوب التوصيل",
+      "receiver": "المستلم"
+    }
+  },
+  "enums": {
+    "gender": {
+      "male": "ذكر",
+      "female": "أنثى"
+    },
+    "institution_type": {
+      "1": "متبرع",
+      "2": "جمعية خيرية",
+      "3": "متبرع وخيرية"
+    },
+    "donation_status": {
+      "-1": "مرفوض",
+      "0": "قيد المراجعة",
+      "1": "مُعتمد"
+    },
+    "request_status": {
+      "-1": "مرفوض",
+      "0": "قيد المراجعة",
+      "1": "مُعتمد"
+    },
+    "delivery_status": {
+      "0": "بانتظار الاستلام",
+      "1": "تم الاستلام",
+      "3": "في الطريق",
+      "4": "تم التسليم"
+    },
+    "item_type": {
+      "food": "أغذية",
+      "clothing": "ملابس",
+      "medical": "طبي",
+      "education": "تعليم",
+      "furniture": "أثاث",
+      "other": "أخرى"
+    },
+    "unit": {
+      "meal": "وجبة",
+      "basket": "سلة",
+      "piece": "قطعة",
+      "pack": "علبة",
+      "book": "كتاب",
+      "carton": "كرتون",
+      "bag": "حقيبة",
+      "parcel": "طرد"
+    }
+  },
+  "nav": {
+    "dashboard": "لوحة التحكم",
+    "donations": "التبرعات",
+    "myDonations": "تبرعاتي",
+    "availableDonations": "التبرعات المتاحة",
+    "receivedRequests": "الطلبات الواردة",
+    "myRequests": "طلباتي",
+    "institutions": "المؤسسات",
+    "beneficiaries": "المستفيدون",
+    "requests": "الطلبات",
+    "tracking": "تتبع التسليم",
+    "delivered": "المُسلَّمة",
+    "settings": "الإعدادات",
+    "collapse": "طيّ القائمة",
+    "logout": "تسجيل الخروج"
+  },
+  "role": {
+    "label": "الدور",
+    "demo": "وضع تجريبي",
+    "demoBadge": "وضع المعاينة",
+    "title": "تبديل دور المؤسسة",
+    "subtitle": "عاين فوراً كيف تتغير الواجهة لكل دور.",
+    "descriptions": {
+      "1": "نشر التبرعات ومراجعة الطلبات الواردة.",
+      "2": "استعراض التبرعات وإرسال الطلبات.",
+      "3": "صلاحيات كاملة للمتبرع والجمعية معاً."
+    }
+  },
+  "header": {
+    "search": "ابحث عن متبرع، مؤسسة أو طلب…",
+    "notifications": "الإشعارات",
+    "profile": "الملف الشخصي",
+    "settings": "الإعدادات",
+    "logout": "تسجيل الخروج",
+    "role": "مشرف عام",
+    "userName": "عبدالله",
+    "userFullName": "عبدالله الراشد",
+    "toggleTheme": "تبديل المظهر"
+  },
+  "lang": { "label": "اللغة", "ar": "العربية", "en": "الإنجليزية" },
+  "auth": {
+    "meta": {
+      "title": "كون · تسجيل الدخول",
+      "description": "نظام كون لربط المتبرعين بالمستفيدين — سجّل دخولك أو أنشئ حساباً جديداً."
+    },
+    "tabs": { "login": "تسجيل الدخول", "register": "إنشاء حساب" },
+    "login": {
+      "title": "مرحباً بعودتك",
+      "subtitle": "سجّل دخولك لمتابعة رحلة العطاء.",
+      "submit": "تسجيل الدخول",
+      "remember": "تذكّرني",
+      "forgot": "نسيت كلمة المرور؟",
+      "identifier": "البريد الإلكتروني أو اسم المستخدم"
+    },
+    "register": {
+      "title": "انضم إلى كون",
+      "subtitle": "أنشئ حسابك وابدأ بصناعة الأثر اليوم.",
+      "submit": "إنشاء الحساب"
+    },
+    "google": "المتابعة باستخدام Google",
+    "terms": "بمتابعتك، أنت توافق على",
+    "termsLink": "الشروط والأحكام",
+    "and": "و",
+    "privacyLink": "سياسة الخصوصية",
+    "hero": {
+      "badge": "KAWN · كون",
+      "stats": {
+        "donors": "متبرع نشط",
+        "beneficiaries": "مستفيد",
+        "delivered": "تبرع موصّل"
+      }
+    }
+  },
+  "dashboard": {
+    "meta": {
+      "title": "كون · لوحة التحكم",
+      "description": "لوحة تحكم المشرف العام في نظام كون — متابعة التبرعات والمؤسسات والطلبات."
+    },
+    "welcome": "مرحباً بعودتك 👋",
+    "title": "لوحة المشرف العام",
+    "subtitle": "نظرة شاملة على أداء المنصة، التبرعات الواردة، والمؤسسات الفعّالة على مدار اليوم.",
+    "dailyReport": "تقرير اليوم",
+    "cta": {
+      "postDonation": "نشر تبرع",
+      "makeRequest": "إرسال طلب"
+    },
+    "stats": {
+      "totalDonations": "إجمالي التبرعات",
+      "activeInstitutions": "المؤسسات النشطة",
+      "pendingRequests": "الطلبات قيد المعالجة",
+      "delivered": "تم التسليم"
+    },
+    "chart": { "title": "تطور التبرعات", "range": "آخر 12 شهراً" },
+    "activity": {
+      "title": "أحدث النشاطات",
+      "items": [
+        { "t": "تبرع جديد بقيمة 5,000 ر.س", "s": "قبل دقيقتين" },
+        { "t": "انضمام مؤسسة الخير", "s": "قبل 12 دقيقة" },
+        { "t": "تم تسليم طلب #4821", "s": "قبل ساعة" },
+        { "t": "طلب جديد قيد المراجعة", "s": "قبل 3 ساعات" }
+      ]
+    }
+  },
+  "institutions": {
+    "meta": {
+      "title": "كون · المؤسسات والفروع",
+      "description": "إدارة المؤسسات المتبرعة والخيرية وفروعها وعناوينها في نظام كون."
+    },
+    "eyebrow": "إدارة المؤسسات",
+    "title": "المؤسسات والفروع",
+    "subtitle": "استعرض وأدر المؤسسات المتبرعة والخيرية وفروعها وعناوينها في مكان واحد.",
+    "new": "مؤسسة جديدة",
+    "searchPlaceholder": "ابحث باسم المؤسسة، المالك أو البريد…",
+    "advancedFilter": "فرز متقدم",
+    "tabs": { "all": "الكل", "1": "المتبرعون", "2": "الجمعيات", "3": "كلاهما" },
+    "columns": {
+      "institution": "المؤسسة",
+      "owner": "المالك",
+      "type": "النوع",
+      "status": "الحالة",
+      "branches": "الفروع",
+      "actions": "إجراءات"
+    },
+    "showBranches": "عرض الفروع",
+    "hideBranches": "إخفاء الفروع",
+    "branchesTitle": "الفروع والعناوين",
+    "addBranch": "إضافة فرع",
+    "mainBranchBadge": "الفرع الرئيسي",
+    "noDescription": "لا يوجد وصف.",
+    "attachmentsLabel": "المرفقات",
+    "noAttachments": "لا توجد مرفقات.",
+    "coords": "الإحداثيات",
+    "empty": "لا توجد مؤسسات مطابقة لبحثك.",
+    "list": [
+      {
+        "id": "INS-001",
+        "name": "مؤسسة البر الخيرية",
+        "description": "مؤسسة خيرية رائدة تركّز على المساعدات الغذائية، كفالة الأيتام، والحملات الموسمية في جميع مناطق المملكة.",
+        "logo": null,
+        "owner": "عبدالعزيز الحارثي",
+        "email": "info@albirr.org",
+        "phone": "+966 11 234 5000",
+        "type": 2,
+        "is_active": true,
+        "attachments": ["السجل_التجاري.pdf", "ترخيص_الجمعية.pdf"],
+        "branches": [
+          {
+            "id": "BR-101",
+            "name": "الفرع الرئيسي",
+            "description": "المقر الإداري الرئيسي للمؤسسة.",
+            "email": "hq@albirr.org",
+            "phone": "+966 11 234 5678",
+            "is_main_branch": true,
+            "address": { "city": "الرياض", "state": "منطقة الرياض", "street": "شارع العليا - حي الورود", "latitude": 24.7136, "longitude": 46.6753, "details": "مبنى رقم 12، الدور الثالث" }
+          },
+          {
+            "id": "BR-102",
+            "name": "فرع جدة",
+            "description": "عمليات المنطقة الغربية والتوزيع.",
+            "email": "jeddah@albirr.org",
+            "phone": "+966 12 345 6789",
+            "is_main_branch": false,
+            "address": { "city": "جدة", "state": "منطقة مكة المكرمة", "street": "شارع التحلية - حي الزهراء", "latitude": 21.5433, "longitude": 39.1728, "details": "بجوار مول التحلية" }
+          }
+        ]
+      },
+      {
+        "id": "INS-002",
+        "name": "شركة الأمل التجارية",
+        "description": "متبرع مؤسسي متخصص في التبرعات العينية من المواد الغذائية والاستهلاكية.",
+        "logo": null,
+        "owner": "نورة السبيعي",
+        "email": "donate@alamal.sa",
+        "phone": "+966 11 987 0000",
+        "type": 1,
+        "is_active": true,
+        "attachments": ["ملف_الشركة.pdf"],
+        "branches": [
+          {
+            "id": "BR-201",
+            "name": "المقر الرئيسي",
+            "description": "المقر الرئيسي — تنسيق التبرعات.",
+            "email": "office@alamal.sa",
+            "phone": "+966 11 987 6543",
+            "is_main_branch": true,
+            "address": { "city": "الرياض", "state": "منطقة الرياض", "street": "طريق الملك عبدالله - حي العقيق", "latitude": 24.7741, "longitude": 46.6386, "details": "البرج ب، الدور الخامس" }
+          }
+        ]
+      },
+      {
+        "id": "INS-003",
+        "name": "مجموعة إحسان الإنسانية",
+        "description": "مجموعة إنسانية تعمل كمتبرع وكجمعية خيرية في آنٍ معاً، وتدعم برامج الإغاثة المتكاملة.",
+        "logo": null,
+        "owner": "محمد الزهراني",
+        "email": "contact@ihsan.org",
+        "phone": "+966 12 555 0000",
+        "type": 3,
+        "is_active": true,
+        "attachments": ["الترخيص.pdf", "التقرير_السنوي.pdf"],
+        "branches": [
+          {
+            "id": "BR-301",
+            "name": "المركز الرئيسي",
+            "description": "مركز العمليات الرئيسي في العاصمة المقدسة.",
+            "email": "main@ihsan.org",
+            "phone": "+966 12 555 1234",
+            "is_main_branch": true,
+            "address": { "city": "مكة المكرمة", "state": "منطقة مكة المكرمة", "street": "شارع إبراهيم الخليل - حي العزيزية", "latitude": 21.3891, "longitude": 39.8579, "details": "مدخل الخدمات من الخلف" }
+          },
+          {
+            "id": "BR-302",
+            "name": "فرع المدينة",
+            "description": "الفرع الإقليمي لخدمة المدينة المنورة.",
+            "email": "madinah@ihsan.org",
+            "phone": "+966 14 555 2345",
+            "is_main_branch": false,
+            "address": { "city": "المدينة المنورة", "state": "منطقة المدينة المنورة", "street": "طريق الملك عبدالعزيز - حي العنبرية", "latitude": 24.4708, "longitude": 39.6126, "details": "الدور الأرضي" }
+          }
+        ]
+      },
+      {
+        "id": "INS-004",
+        "name": "جمعية كفالة اليتيم",
+        "description": "جمعية مكرسة لكفالة الأيتام وتقديم الدعم التعليمي والصحي.",
+        "logo": null,
+        "owner": "هند العتيبي",
+        "email": "info@kafalah.org",
+        "phone": "+966 11 222 0000",
+        "type": 2,
+        "is_active": false,
+        "attachments": [],
+        "branches": [
+          {
+            "id": "BR-401",
+            "name": "الفرع الرئيسي",
+            "description": "المكتب الإداري الرئيسي.",
+            "email": "hq@kafalah.org",
+            "phone": "+966 11 222 3344",
+            "is_main_branch": true,
+            "address": { "city": "الرياض", "state": "منطقة الرياض", "street": "شارع الأمير محمد بن عبدالعزيز - حي السليمانية", "latitude": 24.7029, "longitude": 46.6852, "details": "مبنى رقم 8" }
+          }
+        ]
+      }
+    ]
+  },
+  "beneficiaries": {
+    "meta": {
+      "title": "كون · دليل المستفيدين",
+      "description": "دليل مؤسسات المستفيدين والجمعيات الخيرية مع فروعها وعناوينها وبيانات التواصل."
+    },
+    "eyebrow": "دليل المستفيدين",
+    "title": "دليل المستفيدين",
+    "subtitle": "استعرض المؤسسات الخيرية والمستفيدة، وصفِّها حسب الحالة، واستكشف فروعها وعناوينها.",
+    "totalLabel": "إجمالي المستفيدين",
+    "searchPlaceholder": "ابحث بالاسم أو البريد أو الجوال أو المدينة…",
+    "tabs": { "all": "الكل", "active": "نشط", "inactive": "غير نشط" },
+    "columns": {
+      "institution": "المؤسسة",
+      "email": "البريد الإلكتروني",
+      "phone": "الجوال",
+      "city": "المدينة / الشارع",
+      "status": "الحالة"
+    },
+    "expand": "توسيع الصف",
+    "collapse": "طي الصف",
+    "branchesTitle": "الفروع والعناوين",
+    "mainBranchBadge": "الفرع الرئيسي",
+    "empty": "لا يوجد مستفيدون مطابقون لبحثك."
+  },
+  "donations": {
+    "meta": {
+      "title": "كون · لوحة التبرعات",
+      "description": "لوحة التبرعات لإدارة العرض والطلب بين المتبرعين والجمعيات الخيرية في نظام كون."
+    },
+    "eyebrow": "العرض والطلب",
+    "title": "لوحة التبرعات",
+    "subtitle": "استعرض التبرعات المتاحة وأرسل طلبات للمؤسسات بسهولة وسلاسة.",
+    "new": "تبرع جديد",
+    "searchPlaceholder": "ابحث في التبرعات أو المُرسِلين…",
+    "view": { "kanban": "لوحة", "list": "قائمة" },
+    "columns": {
+      "pending": "قيد المراجعة",
+      "approved": "مُعتمد",
+      "rejected": "مرفوض",
+      "pendingHint": "بانتظار موافقة المشرف",
+      "approvedHint": "متاحة للطلب الآن",
+      "rejectedHint": "لم تستوفِ المعايير"
+    },
+    "card": {
+      "remaining": "المتبقي",
+      "of": "من",
+      "items": "العناصر",
+      "request": "اطلب التبرع",
+      "exhausted": "تم استنفاد الكمية",
+      "unavailable": "غير متاح",
+      "notesLabel": "ملاحظات"
+    },
+    "emptyColumn": "لا توجد تبرعات في هذا القسم.",
+    "modal": {
+      "eyebrow": "طلب تبرع",
+      "from": "من",
+      "item": "عنصر التبرع",
+      "requested_quantity": "الكمية المطلوبة",
+      "ofTotal": "{{pct}}% من إجمالي التبرع",
+      "notes": "ملاحظات الطلب",
+      "optional": "(اختياري)",
+      "notesPlaceholder": "اذكر تفاصيل تساعد المتبرع على الاستجابة لطلبك…",
+      "cancel": "إلغاء",
+      "submit": "تأكيد الطلب",
+      "successTitle": "تم إرسال طلبك",
+      "successBody": "طلبت {{qty}} {{unit}} من «{{title}}». سيتم إشعارك عند الموافقة.",
+      "close": "إغلاق"
+    },
+    "list": [
+      {
+        "id": "DN-1042",
+        "title": "وجبات إفطار جاهزة",
+        "description": "وجبات إفطار ساخنة وجاهزة للتقديم، تُحضَّر يومياً للتوزيع.",
+        "status": 0,
+        "notes": "يرجى الاستلام قبل الساعة 4 عصراً للحفاظ على الطزاجة.",
+        "sent_at": "2026-06-16T09:30:00",
+        "sender_branch": "مطاعم الأمل — فرع الرياض",
+        "sender_city": "الرياض",
+        "items": [
+          { "id": "DI-1", "name": "علبة وجبة إفطار", "description": "أرز ودجاج وسلطة.", "quantity": 500, "remaining_quantity": 320, "item_type": "food", "unit": "meal", "notes": "حلال معتمد." }
+        ]
+      },
+      {
+        "id": "DN-1041",
+        "title": "سلال غذائية شهرية",
+        "description": "سلال غذائية قياسية للأسر تغطي الاحتياجات الشهرية الأساسية.",
+        "status": 1,
+        "notes": "",
+        "sent_at": "2026-06-15T14:10:00",
+        "sender_branch": "مؤسسة البر — الفرع الرئيسي",
+        "sender_city": "جدة",
+        "items": [
+          { "id": "DI-2", "name": "سلة غذائية عائلية", "description": "أرز، زيت، سكر، دقيق، تمر.", "quantity": 200, "remaining_quantity": 80, "item_type": "food", "unit": "basket", "notes": "" }
+        ]
+      },
+      {
+        "id": "DN-1040",
+        "title": "ملابس شتوية أطفال",
+        "description": "قطع ملابس شتوية جديدة بالكامل للأطفال من 4 إلى 12 سنة.",
+        "status": 0,
+        "notes": "",
+        "sent_at": "2026-06-12T10:00:00",
+        "sender_branch": "متاجر النور — فرع الدمام",
+        "sender_city": "الدمام",
+        "items": [
+          { "id": "DI-3", "name": "جاكيت شتوي", "description": "مقاسات متنوعة للأطفال.", "quantity": 350, "remaining_quantity": 350, "item_type": "clothing", "unit": "piece", "notes": "" }
+        ]
+      },
+      {
+        "id": "DN-1039",
+        "title": "أدوية مزمنة",
+        "description": "أدوية للأمراض المزمنة بتواريخ صلاحية سارية.",
+        "status": 1,
+        "notes": "يتطلب مستلمًا من صيدلية مرخصة.",
+        "sent_at": "2026-06-11T08:20:00",
+        "sender_branch": "صيدليات الشفاء — فرع العليا",
+        "sender_city": "الرياض",
+        "items": [
+          { "id": "DI-4", "name": "علبة أدوية", "description": "أدوية متنوعة للأمراض المزمنة.", "quantity": 120, "remaining_quantity": 45, "item_type": "medical", "unit": "pack", "notes": "" }
+        ]
+      },
+      {
+        "id": "DN-1038",
+        "title": "كتب مدرسية",
+        "description": "كتب منهج مدرسي للمرحلتين الابتدائية والمتوسطة.",
+        "status": 1,
+        "notes": "",
+        "sent_at": "2026-06-10T12:00:00",
+        "sender_branch": "مكتبات المعرفة — فرع جدة",
+        "sender_city": "جدة",
+        "items": [
+          { "id": "DI-5", "name": "كتاب مدرسي", "description": "عناوين متنوعة.", "quantity": 800, "remaining_quantity": 0, "item_type": "education", "unit": "book", "notes": "" }
+        ]
+      },
+      {
+        "id": "DN-1037",
+        "title": "أثاث منزلي مستعمل",
+        "description": "أثاث منزلي مستعمل بحالة جيدة.",
+        "status": -1,
+        "notes": "مرفوض — لا يطابق احتياجات المستفيدين الحالية.",
+        "sent_at": "2026-06-09T15:00:00",
+        "sender_branch": "شركة الأمل — المقر الرئيسي",
+        "sender_city": "الرياض",
+        "items": [
+          { "id": "DI-6", "name": "قطعة أثاث", "description": "كنب وطاولات وكراسي.", "quantity": 40, "remaining_quantity": 40, "item_type": "furniture", "unit": "piece", "notes": "" }
+        ]
+      }
+    ]
+  },
+  "tracking": {
+    "meta": {
+      "title": "كون · تتبع التسليم",
+      "description": "تتبع حالة التبرع من الاستلام حتى التسليم في الوقت الفعلي."
+    },
+    "back": "العودة إلى الطلبات",
+    "title": "تتبع التسليم",
+    "subtitle": "متابعة حالة الطلب لحظة بلحظة من الاستلام إلى التسليم.",
+    "meta_card": {
+      "request": "رقم الطلب",
+      "requestValue": "REQ-2026-00412",
+      "donation": "التبرع",
+      "donationValue": "سلال غذائية رمضانية",
+      "receiver_branch": "الفرع المستلم",
+      "receiver_branchValue": "مؤسسة البر — الفرع الرئيسي"
+    },
+    "items": {
+      "title": "عناصر الطلب",
+      "subtitle": "تفصيل الكميات لكل عنصر.",
+      "columns": {
+        "item": "العنصر",
+        "requested": "المطلوبة",
+        "approved": "المعتمدة",
+        "received": "المستلمة"
+      },
+      "list": [
+        { "name": "سلة غذائية عائلية", "unit": "basket", "requested_quantity": 50, "approved_quantity": 50, "received_quantity": 30 },
+        { "name": "كرتون مياه شرب", "unit": "carton", "requested_quantity": 20, "approved_quantity": 15, "received_quantity": 0 }
+      ]
+    },
+    "stagesTitle": "مراحل التسليم",
+    "live": "حيّ",
+    "inProgress": "جارٍ التنفيذ",
+    "stages": {
+      "0": "بانتظار الاستلام",
+      "1": "تم الاستلام",
+      "3": "في الطريق",
+      "4": "تم التسليم"
+    },
+    "driver": {
+      "badge": "مندوب التوصيل",
+      "first_name": "خالد",
+      "last_name": "المنصور",
+      "phone": "+966 55 412 0987",
+      "call": "اتصال",
+      "chat": "محادثة"
+    },
+    "receiver": {
+      "label": "المستلم",
+      "first_name": "سارة",
+      "last_name": "القحطاني",
+      "phone": "+966 50 222 3344"
+    }
+  },
+  "requests": {
+    "meta": {
+      "title": "كَوْن · طلبات التبرع",
+      "description": "استعراض وإدارة طلبات التبرع المقدمة من المستفيدين في منصة كون."
+    },
+    "eyebrow": "المستفيدون والطلبات",
+    "title": "طلبات التبرع",
+    "subtitle": "راجع الطلبات الواردة من المستفيدين، واعتمد الكميات وتابع التسليم.",
+    "new": "طلب جديد",
+    "searchPlaceholder": "ابحث عن مستفيد، عنصر أو رقم طلب…",
+    "tabs": {
+      "all": "الكل",
+      "0": "قيد المراجعة",
+      "1": "مُعتمدة",
+      "-1": "مرفوضة"
+    },
+    "columns": {
+      "id": "الطلب",
+      "beneficiary": "المستفيد",
+      "item": "العنصر المطلوب",
+      "date": "التاريخ",
+      "progress": "تقدم الكميات",
+      "status": "الحالة",
+      "actions": "الإجراءات"
+    },
+    "quantities": {
+      "requested": "المطلوبة",
+      "approved": "المعتمدة",
+      "received": "المستلمة",
+      "shortRequested": "طلب",
+      "shortApproved": "معتمد",
+      "shortReceived": "مستلم",
+      "of": "من"
+    },
+    "actions": {
+      "approve": "اعتماد",
+      "reject": "رفض",
+      "approved": "تم الاعتماد",
+      "rejected": "تم الرفض",
+      "reset": "إعادة تعيين",
+      "expand": "عرض التفاصيل",
+      "collapse": "إخفاء التفاصيل"
+    },
+    "details": {
+      "notesTitle": "ملاحظات الطلب",
+      "notesEmpty": "لم تُضف ملاحظات لهذا الطلب.",
+      "receiverTitle": "المستلم",
+      "receiverBranchTitle": "الفرع المستلم",
+      "phone": "الهاتف",
+      "email": "البريد الإلكتروني",
+      "role": "الدور"
+    },
+    "empty": "لا توجد طلبات مطابقة للفلاتر.",
+    "list": [
+      {
+        "id": "REQ-2026-00412",
+        "status": 0,
+        "date": "2026-06-18T09:30:00",
+        "notes": "يرجى التجهيز للاستلام صباح الجمعة؛ يتوفر لدى الفرع متطوعون للتوزيع بعد صلاة الجمعة مباشرة.",
+        "receiver_branch": "مؤسسة البرّ — المقر الرئيسي",
+        "receiver_branch_city": "الرياض",
+        "receiver_user": {
+          "first_name": "سارة",
+          "last_name": "القحطاني",
+          "role": "منسّقة الفرع",
+          "phone": "+966 50 222 3344",
+          "email": "sara.q@albirr.org"
+        },
+        "item": {
+          "name": "سلة غذائية عائلية",
+          "unit": "basket",
+          "type": "food",
+          "requested_quantity": 50,
+          "approved_quantity": 50,
+          "received_quantity": 30
+        }
+      },
+      {
+        "id": "REQ-2026-00411",
+        "status": 1,
+        "date": "2026-06-17T14:05:00",
+        "notes": "تم الاعتماد بكمية مخفّضة — احتُجِز الباقي لجمعية شريكة.",
+        "receiver_branch": "مجموعة إحسان الإنسانية — المركز الرئيسي",
+        "receiver_branch_city": "مكة المكرمة",
+        "receiver_user": {
+          "first_name": "محمد",
+          "last_name": "الزهراني",
+          "role": "مدير العمليات",
+          "phone": "+966 55 100 2233",
+          "email": "m.zahrani@ihsan.org"
+        },
+        "item": {
+          "name": "كرتون مياه معبأة",
+          "unit": "carton",
+          "type": "food",
+          "requested_quantity": 20,
+          "approved_quantity": 15,
+          "received_quantity": 15
+        }
+      },
+      {
+        "id": "REQ-2026-00410",
+        "status": 0,
+        "date": "2026-06-16T11:20:00",
+        "notes": "",
+        "receiver_branch": "جمعية كفالة اليتيم — المقر الرئيسي",
+        "receiver_branch_city": "الرياض",
+        "receiver_user": {
+          "first_name": "هند",
+          "last_name": "العتيبي",
+          "role": "مسؤولة البرامج",
+          "phone": "+966 55 908 7766",
+          "email": "hind.o@kafalah.org"
+        },
+        "item": {
+          "name": "جاكيت شتوي",
+          "unit": "piece",
+          "type": "clothing",
+          "requested_quantity": 120,
+          "approved_quantity": 0,
+          "received_quantity": 0
+        }
+      },
+      {
+        "id": "REQ-2026-00409",
+        "status": -1,
+        "date": "2026-06-15T08:40:00",
+        "notes": "تم الرفض — سبق أن استفاد المستفيد ضمن نفس دورة التوزيع.",
+        "receiver_branch": "شركة الأمل التجارية — المكتب الرئيسي",
+        "receiver_branch_city": "الرياض",
+        "receiver_user": {
+          "first_name": "نورة",
+          "last_name": "السبيعي",
+          "role": "مسؤولة المسؤولية الاجتماعية",
+          "phone": "+966 55 776 5544",
+          "email": "noura.s@alamal.sa"
+        },
+        "item": {
+          "name": "كتاب مدرسي",
+          "unit": "book",
+          "type": "education",
+          "requested_quantity": 200,
+          "approved_quantity": 0,
+          "received_quantity": 0
+        }
+      },
+      {
+        "id": "REQ-2026-00408",
+        "status": 1,
+        "date": "2026-06-14T16:15:00",
+        "notes": "التوصيل قيد التنفيذ — تم إسناد المندوب.",
+        "receiver_branch": "مؤسسة البرّ — فرع جدة",
+        "receiver_branch_city": "جدة",
+        "receiver_user": {
+          "first_name": "عبدالعزيز",
+          "last_name": "الحارثي",
+          "role": "مدير الفرع",
+          "phone": "+966 55 321 4455",
+          "email": "a.harthi@albirr.org"
+        },
+        "item": {
+          "name": "علبة أدوية",
+          "unit": "pack",
+          "type": "medical",
+          "requested_quantity": 40,
+          "approved_quantity": 40,
+          "received_quantity": 25
+        }
+      }
+    ]
+  },
+  "profile": {
+    "meta": {
+      "title": "كَوْن · ملفي الشخصي",
+      "description": "إدارة معلوماتك الشخصية وإعدادات الأمان وعضوياتك في المؤسسات."
+    },
+    "save": "حفظ التغييرات",
+    "changeAvatar": "تغيير الصورة الشخصية",
+    "personal": {
+      "title": "المعلومات الشخصية",
+      "subtitle": "حدّث البيانات المرتبطة بحسابك.",
+      "badge": "الحساب"
+    },
+    "security": {
+      "title": "تغيير كلمة المرور",
+      "subtitle": "استخدم كلمة مرور قوية لا تستخدمها في مواقع أخرى.",
+      "current": "كلمة المرور الحالية",
+      "new": "كلمة المرور الجديدة",
+      "confirm": "تأكيد كلمة المرور الجديدة",
+      "update": "تحديث كلمة المرور",
+      "tip": "استخدم 8 أحرف فأكثر مع حروف وأرقام ورموز.",
+      "strength": {
+        "veryWeak": "ضعيفة جداً",
+        "weak": "ضعيفة",
+        "fair": "متوسطة",
+        "strong": "قوية",
+        "veryStrong": "قوية جداً"
+      }
+    },
+    "institutions": {
+      "title": "مؤسساتي",
+      "subtitle": "المؤسسات التي تنتمي إليها مع دورك في كلٍ منها.",
+      "joined": "انضممت",
+      "roles": {
+        "admin": "مدير",
+        "staff": "موظف"
+      },
+      "list": [
+        { "id": "INS-001", "name": "مؤسسة البر الخيرية", "type": 2, "role": "admin", "city": "الرياض", "joined": "2024-02-15" },
+        { "id": "INS-002", "name": "شركة الأمل التجارية", "type": 1, "role": "staff", "city": "الرياض", "joined": "2024-06-01" },
+        { "id": "INS-003", "name": "مجموعة إحسان الإنسانية", "type": 3, "role": "staff", "city": "مكة المكرمة", "joined": "2025-01-20" }
+      ]
+    }
+  },
+  "errors": {
+    "notFoundTitle": "الصفحة غير موجودة",
+    "notFoundBody": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
+    "goHome": "العودة للرئيسية",
+    "errorTitle": "تعذّر تحميل الصفحة",
+    "errorBody": "حدث خطأ ما من جانبنا. يمكنك المحاولة مجدداً أو الرجوع للرئيسية.",
+    "tryAgain": "حاول مجدداً"
+  },
+  "settingsPage": {
+    "meta": {
+      "title": "كَوْن · الإعدادات",
+      "description": "إدارة تفضيلات التطبيق، أصناف التبرعات، الوحدات والمناطق."
+    },
+    "title": "إعدادات النظام",
+    "subtitle": "خصّص مساحة العمل، الأصناف والمناطق الجغرافية.",
+    "tabs": {
+      "general": "الإعدادات العامة",
+      "itemTypes": "أصناف التبرعات",
+      "units": "الوحدات",
+      "regions": "المناطق"
+    },
+    "general": {
+      "title": "تفضيلات التطبيق",
+      "subtitle": "خصّص شكل ولغة منصة كَوْن كما يناسبك.",
+      "theme": "المظهر",
+      "themeHint": "اختر الوضع البصري المفضّل لديك.",
+      "themes": { "light": "فاتح", "dark": "داكن" },
+      "language": "اللغة الافتراضية",
+      "languageHint": "لغة الواجهة عبر جميع صفحات المنصة."
+    },
+    "itemTypes": {
+      "title": "أصناف التبرعات",
+      "subtitle": "الأصناف الأساسية المستخدمة في التبرعات والطلبات.",
+      "add": "إضافة صنف جديد",
+      "name": "اسم الصنف",
+      "empty": "لا توجد أصناف بعد. أضف الصنف الأول.",
+      "samples": {
+        "food": "طعام",
+        "clothes": "ملابس",
+        "medicine": "أدوية",
+        "school": "مستلزمات مدرسية"
+      }
+    },
+    "units": {
+      "title": "وحدات القياس",
+      "subtitle": "الوحدات المستخدمة لتقدير كميات التبرعات.",
+      "add": "إضافة وحدة جديدة",
+      "name": "اسم الوحدة",
+      "abbr": "الاختصار",
+      "empty": "لا توجد وحدات معرّفة. أضف الوحدة الأولى.",
+      "samples": {
+        "box":   { "name": "صندوق", "abbr": "صن" },
+        "kg":    { "name": "كيلوجرام", "abbr": "كجم" },
+        "piece": { "name": "قطعة", "abbr": "قطعة" },
+        "liter": { "name": "لتر", "abbr": "ل" }
+      }
+    },
+    "regions": {
+      "title": "المناطق والولايات",
+      "subtitle": "المناطق الجغرافية المستخدمة للمؤسسات والتوصيل.",
+      "add": "إضافة منطقة جديدة",
+      "name": "اسم المنطقة",
+      "code": "الرمز",
+      "empty": "لا توجد مناطق بعد. أضف المنطقة الأولى.",
+      "samples": {
+        "riyadh": "الرياض",
+        "mecca": "مكة المكرمة",
+        "eastern": "المنطقة الشرقية",
+        "madinah": "المدينة المنورة"
+      }
+    }
+  },
+  "delivered": {
+    "meta": {
+      "title": "كَوْن · الطلبات المُسلَّمة",
+      "description": "أرشيف عمليات التبرع المكتملة مع تواريخ التسليم وملخص الكميات."
+    },
+    "eyebrow": "أرشيف اللوجستيات",
+    "title": "الطلبات المُسلَّمة",
+    "subtitle": "استعرض عمليات التبرع المكتملة. كل عنصر مُتعقَّب من الاستلام حتى التسليم النهائي.",
+    "totalLabel": "إجمالي المُسلَّم",
+    "searchPlaceholder": "ابحث بالمستفيد، العنصر أو رقم التسليم…",
+    "statusBadge": "تم التسليم",
+    "quantityLabel": "المستلمة / المطلوبة",
+    "pickedAtLabel": "وقت الاستلام",
+    "deliveredAtLabel": "وقت التسليم",
+    "empty": "لا توجد طلبات مُسلَّمة مطابقة لبحثك.",
+    "list": [
+      {
+        "id": "DEL-2026-001",
+        "beneficiary_name": "مؤسسة البر الخيرية",
+        "beneficiary_branch": "المقر الرئيسي",
+        "beneficiary_city": "الرياض",
+        "item_name": "سلة غذائية عائلية",
+        "item_type": "food",
+        "unit": "basket",
+        "requested_quantity": 50,
+        "received_quantity": 50,
+        "picked_at": "2026-06-13T09:30:00",
+        "delivered_at": "2026-06-13T14:15:00"
+      },
+      {
+        "id": "DEL-2026-002",
+        "beneficiary_name": "مجموعة إحسان الإنسانية",
+        "beneficiary_branch": "المركز الرئيسي",
+        "beneficiary_city": "مكة المكرمة",
+        "item_name": "كرتون مياه معبأة",
+        "item_type": "food",
+        "unit": "carton",
+        "requested_quantity": 15,
+        "received_quantity": 15,
+        "picked_at": "2026-06-12T08:00:00",
+        "delivered_at": "2026-06-12T11:45:00"
+      },
+      {
+        "id": "DEL-2026-003",
+        "beneficiary_name": "جمعية كفالة اليتيم",
+        "beneficiary_branch": "المقر الرئيسي",
+        "beneficiary_city": "الرياض",
+        "item_name": "جاكيت شتوي",
+        "item_type": "clothing",
+        "unit": "piece",
+        "requested_quantity": 120,
+        "received_quantity": 120,
+        "picked_at": "2026-06-10T10:20:00",
+        "delivered_at": "2026-06-10T16:30:00"
+      },
+      {
+        "id": "DEL-2026-004",
+        "beneficiary_name": "مؤسسة البر الخيرية",
+        "beneficiary_branch": "فرع جدة",
+        "beneficiary_city": "جدة",
+        "item_name": "علبة أدوية",
+        "item_type": "medical",
+        "unit": "pack",
+        "requested_quantity": 40,
+        "received_quantity": 40,
+        "picked_at": "2026-06-09T07:45:00",
+        "delivered_at": "2026-06-09T12:00:00"
+      },
+      {
+        "id": "DEL-2026-005",
+        "beneficiary_name": "مجموعة إحسان الإنسانية",
+        "beneficiary_branch": "فرع المدينة",
+        "beneficiary_city": "المدينة المنورة",
+        "item_name": "كتاب مدرسي",
+        "item_type": "education",
+        "unit": "book",
+        "requested_quantity": 200,
+        "received_quantity": 200,
+        "picked_at": "2026-06-08T09:00:00",
+        "delivered_at": "2026-06-08T15:20:00"
+      },
+      {
+        "id": "DEL-2026-006",
+        "beneficiary_name": "مؤسسة البر الخيرية",
+        "beneficiary_branch": "المقر الرئيسي",
+        "beneficiary_city": "الرياض",
+        "item_name": "علبة وجبة إفطار",
+        "item_type": "food",
+        "unit": "meal",
+        "requested_quantity": 300,
+        "received_quantity": 300,
+        "picked_at": "2026-06-07T11:00:00",
+        "delivered_at": "2026-06-07T13:45:00"
+      }
+    ]
+  }
+}

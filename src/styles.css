@@ -1,0 +1,150 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Kawn (كون) Design System
+ * Premium donor-beneficiary platform
+ * All colors in HSL via oklch / hex tokens. Use semantic tokens only in components.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-medium: var(--primary-medium);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-gold: var(--gold);
+  --color-gold-foreground: var(--gold-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --font-sans: "Cairo", system-ui, sans-serif;
+  --font-display: "Cairo", system-ui, sans-serif;
+
+  --shadow-elegant: 0 20px 60px -20px color-mix(in oklab, var(--primary) 35%, transparent);
+  --shadow-gold: 0 10px 40px -10px color-mix(in oklab, var(--gold) 45%, transparent);
+}
+
+:root {
+  --radius: 0.875rem;
+
+  /* Brand */
+  --kawn-primary-dark: #0F3D2E;
+  --kawn-primary-medium: #1E5A46;
+  --kawn-gold: #F2C94C;
+  --kawn-bg-light: #F8F6F0;
+  --kawn-dark-bg: #081C15;
+  --kawn-muted: #636363;
+
+  /* Light theme */
+  --background: #F8F6F0;
+  --foreground: #0F3D2E;
+  --card: #FFFFFF;
+  --card-foreground: #0F3D2E;
+  --popover: #FFFFFF;
+  --popover-foreground: #0F3D2E;
+  --primary: #0F3D2E;
+  --primary-foreground: #F8F6F0;
+  --primary-medium: #1E5A46;
+  --secondary: #EFEAD8;
+  --secondary-foreground: #0F3D2E;
+  --muted: #EFEAD8;
+  --muted-foreground: #636363;
+  --accent: #F2C94C;
+  --accent-foreground: #0F3D2E;
+  --gold: #F2C94C;
+  --gold-foreground: #0F3D2E;
+  --destructive: #B3261E;
+  --destructive-foreground: #FFFFFF;
+  --border: #E5E0D0;
+  --input: #E5E0D0;
+  --ring: #F2C94C;
+}
+
+.dark {
+  --background: #081C15;
+  --foreground: #F8F6F0;
+  --card: #0F3D2E;
+  --card-foreground: #F8F6F0;
+  --popover: #0F3D2E;
+  --popover-foreground: #F8F6F0;
+  --primary: #F2C94C;
+  --primary-foreground: #081C15;
+  --primary-medium: #1E5A46;
+  --secondary: #1E5A46;
+  --secondary-foreground: #F8F6F0;
+  --muted: #11261D;
+  --muted-foreground: #A8B5AE;
+  --accent: #F2C94C;
+  --accent-foreground: #081C15;
+  --gold: #F2C94C;
+  --gold-foreground: #081C15;
+  --destructive: #E5484D;
+  --destructive-foreground: #FFFFFF;
+  --border: rgba(248, 246, 240, 0.08);
+  --input: rgba(248, 246, 240, 0.12);
+  --ring: #F2C94C;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    font-family: var(--font-sans);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Floating label inputs */
+@utility kawn-field {
+  position: relative;
+}
+
+/* Animated mesh gradient */
+@utility mesh-kawn {
+  background-color: #0F3D2E;
+  background-image:
+    radial-gradient(at 18% 22%, #1E5A46 0px, transparent 55%),
+    radial-gradient(at 82% 18%, color-mix(in oklab, #F2C94C 45%, transparent) 0px, transparent 50%),
+    radial-gradient(at 75% 85%, #1E5A46 0px, transparent 55%),
+    radial-gradient(at 20% 80%, color-mix(in oklab, #F2C94C 30%, transparent) 0px, transparent 50%),
+    radial-gradient(at 50% 50%, #0F3D2E 0px, transparent 60%);
+}
+
+@utility glass-card {
+  background: color-mix(in oklab, #F8F6F0 12%, transparent);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid color-mix(in oklab, #F8F6F0 20%, transparent);
+}
