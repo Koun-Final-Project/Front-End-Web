@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { useTranslation } from "react-i18next";
-
+//test
 interface Props {
   value: number;
   duration?: number;
