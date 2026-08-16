@@ -1,11 +1,15 @@
-import { useMemo, useState, type ReactNode } from "react";
+
+
+
+import { useState, type ReactNode } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { api } from "../lib/api/axios"; 
 import {
   Settings as SettingsIcon,
   Sliders,
-  Boxes,
   Ruler,
   MapPin,
   Plus,
@@ -17,6 +21,7 @@ import {
   Moon,
   Languages,
   Sparkles,
+  Loader2,
 } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { useTheme } from "@/components/theme-provider";
@@ -34,7 +39,7 @@ export const Route = createFileRoute("/settings")({
   component: SettingsPage,
 });
 
-type TabKey = "general" | "itemTypes" | "units" | "regions";
+type TabKey = "general" | "units" | "regions";
 
 function SettingsPage() {
   const { t } = useTranslation();
@@ -42,7 +47,6 @@ function SettingsPage() {
 
   const tabs: { key: TabKey; icon: typeof Sliders }[] = [
     { key: "general", icon: Sliders },
-    { key: "itemTypes", icon: Boxes },
     { key: "units", icon: Ruler },
     { key: "regions", icon: MapPin },
   ];
@@ -114,7 +118,6 @@ function SettingsPage() {
                 transition={{ duration: 0.28, ease: "easeOut" }}
               >
                 {tab === "general" && <GeneralTab />}
-                {tab === "itemTypes" && <ItemTypesTab />}
                 {tab === "units" && <UnitsTab />}
                 {tab === "regions" && <RegionsTab />}
               </motion.div>
@@ -240,7 +243,7 @@ function GeneralTab() {
   );
 }
 
-/* ---------------- CRUD list generic ---------------- */
+/* ---------------- CRUD list generic component ---------------- */
 
 type Item = { id: string; name: string; extra?: string };
 
@@ -249,24 +252,34 @@ function CrudTab({
   titleKey,
   subtitleKey,
   addKey,
-  initial,
   placeholderKey,
   extraLabelKey,
   extraPlaceholderKey,
   emptyKey,
+  queryKey,
+  fetchData,
+  createItem,
+  updateItem,
+  deleteItem,
 }: {
-  icon: typeof Boxes;
+  icon: typeof Ruler;
   titleKey: string;
   subtitleKey: string;
   addKey: string;
-  initial: Item[];
   placeholderKey: string;
   extraLabelKey?: string;
   extraPlaceholderKey?: string;
   emptyKey: string;
+  queryKey: string[];
+  fetchData: () => Promise<Item[]>;
+  createItem: (data: { name: string; extra?: string }) => Promise<any>;
+  updateItem: (id: string, data: { name: string; extra?: string }) => Promise<any>;
+  deleteItem: (id: string) => Promise<any>;
 }) {
   const { t } = useTranslation();
-  const [items, setItems] = useState<Item[]>(initial);
+  const queryClient = useQueryClient();
+
+  // State
   const [name, setName] = useState("");
   const [extra, setExtra] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -275,14 +288,38 @@ function CrudTab({
 
   const canAdd = name.trim().length > 0;
 
+  const { data: items = [], isLoading } = useQuery({
+    queryKey,
+    queryFn: fetchData,
+  });
+
+  const createMut = useMutation({
+    mutationFn: createItem,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey });
+      setName("");
+      setExtra("");
+    },
+  });
+
+  const updateMut = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: { name: string; extra?: string } }) => updateItem(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey });
+      setEditingId(null);
+    },
+  });
+
+  const deleteMut = useMutation({
+    mutationFn: deleteItem,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey });
+    },
+  });
+
   const add = () => {
-    if (!canAdd) return;
-    setItems((xs) => [
-      ...xs,
-      { id: crypto.randomUUID(), name: name.trim(), extra: extra.trim() || undefined },
-    ]);
-    setName("");
-    setExtra("");
+    if (!canAdd || createMut.isPending) return;
+    createMut.mutate({ name: name.trim(), extra: extra.trim() || undefined });
   };
 
   const startEdit = (it: Item) => {
@@ -290,14 +327,19 @@ function CrudTab({
     setEditName(it.name);
     setEditExtra(it.extra ?? "");
   };
+
   const saveEdit = () => {
-    if (!editingId) return;
-    setItems((xs) =>
-      xs.map((x) => (x.id === editingId ? { ...x, name: editName.trim() || x.name, extra: editExtra.trim() || undefined } : x)),
-    );
-    setEditingId(null);
+    if (!editingId || updateMut.isPending) return;
+    updateMut.mutate({
+      id: editingId,
+      data: { name: editName.trim(), extra: editExtra.trim() || undefined },
+    });
   };
-  const remove = (id: string) => setItems((xs) => xs.filter((x) => x.id !== id));
+
+  const remove = (id: string) => {
+    if (deleteMut.isPending) return;
+    deleteMut.mutate(id);
+  };
 
   return (
     <GlassCard>
@@ -323,34 +365,33 @@ function CrudTab({
         <motion.button
           type="button"
           onClick={add}
-          disabled={!canAdd}
+          disabled={!canAdd || createMut.isPending}
           whileHover={{ scale: canAdd ? 1.03 : 1 }}
           whileTap={{ scale: canAdd ? 0.97 : 1 }}
           className={cn(
             "relative inline-flex h-14 items-center justify-center gap-2 overflow-hidden rounded-xl px-6 text-sm font-bold text-gold-foreground transition-all",
             "bg-gradient-to-r from-gold to-[#E5B93A]",
-            canAdd
+            canAdd && !createMut.isPending
               ? "shadow-[0_10px_30px_-8px_color-mix(in_oklab,#F2C94C_60%,transparent)] hover:shadow-[0_16px_40px_-8px_color-mix(in_oklab,#F2C94C_75%,transparent)]"
-              : "opacity-50",
+              : "opacity-50 cursor-not-allowed",
           )}
         >
-          <span
-            aria-hidden
-            className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 hover:opacity-100"
-            style={{
-              background:
-                "radial-gradient(120% 60% at 50% 0%, color-mix(in oklab, #ffffff 45%, transparent), transparent 60%)",
-            }}
-          />
-          <Plus className="h-4 w-4" />
+          {createMut.isPending ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Plus className="h-4 w-4" />
+          )}
           {t(addKey)}
-          <Sparkles className="h-3.5 w-3.5 opacity-80" />
         </motion.button>
       </div>
 
       {/* Items grid */}
       <div className="mt-6">
-        {items.length === 0 ? (
+        {isLoading ? (
+          <div className="flex h-32 items-center justify-center rounded-xl border border-dashed border-border p-8">
+            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+          </div>
+        ) : items.length === 0 ? (
           <p className="rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
             {t(emptyKey)}
           </p>
@@ -369,11 +410,6 @@ function CrudTab({
                     transition={{ duration: 0.2 }}
                     className="group relative overflow-hidden rounded-xl border border-border/70 bg-card/70 p-4 backdrop-blur-md transition-all hover:border-gold/60 hover:shadow-lg"
                   >
-                    <span
-                      aria-hidden
-                      className="pointer-events-none absolute -top-8 -end-8 h-24 w-24 rounded-full opacity-0 blur-2xl transition-opacity group-hover:opacity-60"
-                      style={{ background: "color-mix(in oklab, #F2C94C 35%, transparent)" }}
-                    />
                     {editing ? (
                       <div className="space-y-2">
                         <input
@@ -392,15 +428,18 @@ function CrudTab({
                         <div className="flex items-center gap-2 pt-1">
                           <button
                             onClick={saveEdit}
-                            className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90"
+                            disabled={updateMut.isPending}
+                            className="inline-flex flex-1 items-center justify-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
                           >
-                            <Check className="h-3.5 w-3.5" /> {t("common.save")}
+                            {updateMut.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
+                            {t("common.save")}
                           </button>
                           <button
                             onClick={() => setEditingId(null)}
+                            disabled={updateMut.isPending}
                             className="inline-flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold hover:bg-muted"
                           >
-                            <X className="h-3.5 w-3.5" /> {t("common.cancel")}
+                            <X className="h-3.5 w-3.5" />
                           </button>
                         </div>
                       </div>
@@ -417,14 +456,13 @@ function CrudTab({
                             <button
                               onClick={() => startEdit(it)}
                               className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-background hover:border-gold hover:text-gold"
-                              aria-label={t("common.edit")}
                             >
                               <Pencil className="h-3.5 w-3.5" />
                             </button>
                             <button
                               onClick={() => remove(it.id)}
-                              className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-background text-destructive hover:border-destructive hover:bg-destructive/10"
-                              aria-label={t("common.delete")}
+                              disabled={deleteMut.isPending}
+                              className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-background text-destructive hover:border-destructive hover:bg-destructive/10 disabled:opacity-50"
                             >
                               <Trash2 className="h-3.5 w-3.5" />
                             </button>
@@ -443,41 +481,9 @@ function CrudTab({
   );
 }
 
-function ItemTypesTab() {
-  const { t } = useTranslation();
-  const initial: Item[] = useMemo(
-    () => [
-      { id: "1", name: t("settingsPage.itemTypes.samples.food") },
-      { id: "2", name: t("settingsPage.itemTypes.samples.clothes") },
-      { id: "3", name: t("settingsPage.itemTypes.samples.medicine") },
-      { id: "4", name: t("settingsPage.itemTypes.samples.school") },
-    ],
-    [t],
-  );
-  return (
-    <CrudTab
-      icon={Boxes}
-      titleKey="settingsPage.itemTypes.title"
-      subtitleKey="settingsPage.itemTypes.subtitle"
-      addKey="settingsPage.itemTypes.add"
-      placeholderKey="settingsPage.itemTypes.name"
-      emptyKey="settingsPage.itemTypes.empty"
-      initial={initial}
-    />
-  );
-}
+/* ---------------- API Integrations ---------------- */
 
 function UnitsTab() {
-  const { t } = useTranslation();
-  const initial: Item[] = useMemo(
-    () => [
-      { id: "1", name: t("settingsPage.units.samples.box.name"), extra: t("settingsPage.units.samples.box.abbr") },
-      { id: "2", name: t("settingsPage.units.samples.kg.name"), extra: t("settingsPage.units.samples.kg.abbr") },
-      { id: "3", name: t("settingsPage.units.samples.piece.name"), extra: t("settingsPage.units.samples.piece.abbr") },
-      { id: "4", name: t("settingsPage.units.samples.liter.name"), extra: t("settingsPage.units.samples.liter.abbr") },
-    ],
-    [t],
-  );
   return (
     <CrudTab
       icon={Ruler}
@@ -488,22 +494,35 @@ function UnitsTab() {
       extraLabelKey="settingsPage.units.abbr"
       extraPlaceholderKey="settingsPage.units.abbr"
       emptyKey="settingsPage.units.empty"
-      initial={initial}
+      queryKey={["api-units"]}
+      fetchData={async () => {
+        const res = await api.get('/unit');
+        return res.data.data.map((u: any) => ({
+          id: String(u.id),
+          name: u.name,
+          extra: u.description || "",
+        }));
+      }}
+      createItem={async (data) => {
+        const fd = new FormData();
+        fd.append('name', data.name);
+        if (data.extra) fd.append('description', data.extra);
+        return await api.post('/unit/create', fd);
+      }}
+      updateItem={async (id, data) => {
+        const fd = new FormData();
+        fd.append('name', data.name);
+        if (data.extra) fd.append('description', data.extra);
+        return await api.post(`/unit/update/${id}`, fd);
+      }}
+      deleteItem={async (id) => {
+        return await api.delete(`/unit/delete/${id}`);
+      }}
     />
   );
 }
 
 function RegionsTab() {
-  const { t } = useTranslation();
-  const initial: Item[] = useMemo(
-    () => [
-      { id: "1", name: t("settingsPage.regions.samples.riyadh") },
-      { id: "2", name: t("settingsPage.regions.samples.mecca") },
-      { id: "3", name: t("settingsPage.regions.samples.eastern") },
-      { id: "4", name: t("settingsPage.regions.samples.madinah") },
-    ],
-    [t],
-  );
   return (
     <CrudTab
       icon={MapPin}
@@ -511,10 +530,28 @@ function RegionsTab() {
       subtitleKey="settingsPage.regions.subtitle"
       addKey="settingsPage.regions.add"
       placeholderKey="settingsPage.regions.name"
-      extraLabelKey="settingsPage.regions.code"
-      extraPlaceholderKey="settingsPage.regions.code"
       emptyKey="settingsPage.regions.empty"
-      initial={initial}
+      queryKey={["api-cities"]}
+      fetchData={async () => {
+        const res = await api.get('/city');
+        return res.data.data.map((c: any) => ({
+          id: String(c.id),
+          name: c.name,
+        }));
+      }}
+      createItem={async (data) => {
+        const fd = new FormData();
+        fd.append('name', data.name);
+        return await api.post('/city/create', fd);
+      }}
+      updateItem={async (id, data) => {
+        const fd = new FormData();
+        fd.append('name', data.name);
+        return await api.post(`/city/update/${id}`, fd);
+      }}
+      deleteItem={async (id) => {
+        return await api.delete(`/city/delete/${id}`);
+      }}
     />
   );
 }

@@ -1,4 +1,7 @@
-import { useMemo, useState } from "react";
+
+
+
+import { useMemo, useState, useEffect } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
@@ -14,11 +17,12 @@ import {
   Eye,
   EyeOff,
   ShieldCheck,
-  Building2,
   BadgeCheck,
   Save,
+  Loader2,
 } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
+import { useProfile, useUpdateProfile } from "@/hooks/useProfile"; 
 import i18n from "@/i18n";
 
 export const Route = createFileRoute("/profile")({
@@ -36,22 +40,62 @@ type FieldKey = "first_name" | "last_name" | "username" | "email" | "phone" | "g
 function ProfilePage() {
   const { t } = useTranslation();
 
+  const { data: profileData, isLoading } = useProfile();
+  const { mutate: updateProfile, isPending: isUpdating } = useUpdateProfile();
+  
+  const user = profileData?.data?.profile;
+
   const [form, setForm] = useState<Record<FieldKey, string>>({
-    first_name: "Abdullah",
-    last_name: "Al-Rashed",
-    username: "abdullah.rashed",
-    email: "abdullah@kawn.sa",
-    phone: "+966 55 412 0987",
-    gender: "male",
-    birthday: "1995-04-12",
+    first_name: "",
+    last_name: "",
+    username: "",
+    email: "",
+    phone: "",
+    gender: "1", 
+    birthday: "",
   });
 
+  const [password, setPassword] = useState("");
+  const [showPw, setShowPw] = useState(false);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    if (user) {
+      setForm({
+        first_name: user.first_name || "",
+        last_name: user.last_name || "",
+        username: user.username || "",
+        email: user.email || "",
+        phone: user.phone || "",
+        gender: user.gender?.toString() || "1",
+        birthday: user.birthday || "",
+      });
+    }
+  }, [user]);
+
   const update = (k: FieldKey, v: string) => setForm((p) => ({ ...p, [k]: v }));
+
+  const handleSave = () => {
+    const payload: any = {
+      first_name: form.first_name,
+      last_name: form.last_name,
+      username: form.username,
+      email: form.email,
+      phone: form.phone,
+      gender: Number(form.gender),
+    };
+
+    if (form.birthday) payload.birthday = form.birthday;
+    if (password) payload.password = password;
+    if (avatarFile) payload.avatar = avatarFile;
+
+    updateProfile(payload);
+  };
 
   const fieldsLeft: { k: FieldKey; icon: any; type?: string }[] = [
     { k: "first_name", icon: User },
     { k: "username", icon: AtSign },
-    { k: "phone", icon: Phone },
+    { k: "phone", icon: Phone, type: "tel" },
     { k: "birthday", icon: Calendar, type: "date" },
   ];
   const fieldsRight: { k: FieldKey; icon: any; type?: string }[] = [
@@ -60,27 +104,25 @@ function ProfilePage() {
     { k: "gender", icon: VenetianMask },
   ];
 
-  // Password section
-  const [pw, setPw] = useState({ current: "", next: "", confirm: "" });
-  const [showPw, setShowPw] = useState(false);
-  const strength = useMemo(() => scorePassword(pw.next), [pw.next]);
+  const strength = useMemo(() => scorePassword(password), [password]);
   const strengthLabels = [
-    t("profile.security.strength.veryWeak"),
-    t("profile.security.strength.weak"),
-    t("profile.security.strength.fair"),
-    t("profile.security.strength.strong"),
-    t("profile.security.strength.veryStrong"),
+    t("profile.security.strength.veryWeak", "ضعيفة جداً"),
+    t("profile.security.strength.weak", "ضعيفة"),
+    t("profile.security.strength.fair", "متوسطة"),
+    t("profile.security.strength.strong", "قوية"),
+    t("profile.security.strength.veryStrong", "قوية جداً"),
   ];
   const strengthColors = ["#EF4444", "#F59E0B", "#F2C94C", "#10B981", "#1E5A46"];
 
-  const institutions = t("profile.institutions.list", { returnObjects: true }) as Array<{
-    id: string;
-    name: string;
-    type: 1 | 2 | 3;
-    role: "admin" | "staff";
-    city: string;
-    joined: string;
-  }>;
+  if (isLoading && !user) {
+    return (
+      <AppShell>
+        <div className="flex h-[60vh] items-center justify-center">
+          <Loader2 className="h-10 w-10 animate-spin text-primary" />
+        </div>
+      </AppShell>
+    );
+  }
 
   return (
     <AppShell>
@@ -104,69 +146,81 @@ function ProfilePage() {
           transition={{ type: "spring", stiffness: 220, damping: 22 }}
           className="group relative"
         >
-          <div className="h-32 w-32 rounded-full ring-4 ring-background shadow-[0_20px_50px_-20px_rgba(30,90,70,0.6)] sm:h-36 sm:w-36">
-            <div className="flex h-full w-full items-center justify-center rounded-full bg-gradient-to-br from-primary to-[#0F3D2E] text-4xl font-extrabold text-primary-foreground">
-              {form.first_name.charAt(0)}
-              {form.last_name.charAt(0)}
-            </div>
+          <div className="h-32 w-32 overflow-hidden rounded-full ring-4 ring-background shadow-[0_20px_50px_-20px_rgba(30,90,70,0.6)] sm:h-36 sm:w-36">
+            {avatarFile ? (
+              <img src={URL.createObjectURL(avatarFile)} alt="Avatar" className="h-full w-full object-cover" />
+            ) : user?.avatar ? (
+              <img src={user.avatar} alt="Avatar" className="h-full w-full object-cover" />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center rounded-full bg-gradient-to-br from-primary to-[#0F3D2E] text-4xl font-extrabold text-primary-foreground uppercase">
+                {form.first_name?.charAt(0) || ""}
+                {form.last_name?.charAt(0) || ""}
+              </div>
+            )}
           </div>
-          <button
-            type="button"
-            aria-label={t("profile.changeAvatar")}
-            className="absolute bottom-1 end-1 inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-lg transition-transform duration-200 hover:scale-110 hover:border-gold active:scale-95"
+          
+          {/* زر اختيار الصورة */}
+          <label
+            aria-label={t("profile.changeAvatar", "تغيير الصورة")}
+            className="absolute bottom-1 end-1 inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-border bg-card text-foreground shadow-lg transition-transform duration-200 hover:scale-110 hover:border-gold active:scale-95"
           >
             <Camera className="h-4.5 w-4.5" />
-          </button>
+            <input 
+              type="file" 
+              accept="image/*" 
+              className="hidden" 
+              onChange={(e) => setAvatarFile(e.target.files?.[0] || null)} 
+            />
+          </label>
         </motion.div>
 
         <div className="flex-1 pb-1">
           <h1 className="text-2xl font-extrabold tracking-tight text-start sm:text-3xl">
             {form.first_name} {form.last_name}
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground text-start">
+          <p className="mt-1 text-sm text-muted-foreground text-start" dir="ltr">
             @{form.username} · {form.email}
           </p>
         </div>
 
-        <button className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground shadow-[0_10px_25px_-10px_rgba(30,90,70,0.6)] transition-all hover:scale-[1.02] hover:shadow-[0_15px_30px_-10px_rgba(30,90,70,0.8)] active:scale-[0.98]">
-          <Save className="h-4 w-4" />
-          {t("profile.save")}
+        <button 
+          onClick={handleSave}
+          disabled={isUpdating}
+          className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground shadow-[0_10px_25px_-10px_rgba(30,90,70,0.6)] transition-all hover:scale-[1.02] hover:shadow-[0_15px_30px_-10px_rgba(30,90,70,0.8)] active:scale-[0.98] disabled:opacity-70 disabled:hover:scale-100"
+        >
+          {isUpdating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+          {t("profile.save", "حفظ التعديلات")}
         </button>
       </div>
 
-      {/* Main grid */}
       <div className="grid gap-6 lg:grid-cols-3">
-        {/* Personal info */}
         <section className="lg:col-span-2 rounded-3xl border border-border bg-card/70 p-6 shadow-sm backdrop-blur-md sm:p-8">
           <header className="mb-6 flex items-start justify-between gap-3">
             <div>
-              <h2 className="text-lg font-extrabold text-start">{t("profile.personal.title")}</h2>
+              <h2 className="text-lg font-extrabold text-start">{t("profile.personal.title", "المعلومات الشخصية")}</h2>
               <p className="mt-1 text-sm text-muted-foreground text-start">
-                {t("profile.personal.subtitle")}
+                {t("profile.personal.subtitle", "قم بتحديث بياناتك الشخصية للظهور بشكل أفضل.")}
               </p>
             </div>
-            <span className="hidden rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary sm:inline-flex">
-              {t("profile.personal.badge")}
-            </span>
           </header>
 
           <div className="grid gap-5 sm:grid-cols-2">
             {fieldsLeft.map((f) => (
               <ProfileField
                 key={f.k}
-                label={t(`fields.users.${f.k}`)}
+                label={t(`fields.users.${f.k}`, f.k)}
                 icon={<f.icon className="h-4 w-4" />}
                 type={f.type}
                 value={form[f.k]}
                 onChange={(v) => update(f.k, v)}
                 k={f.k}
-                t={t}
+            
               />
             ))}
             {fieldsRight.map((f) => (
               <ProfileField
                 key={f.k}
-                label={t(`fields.users.${f.k}`)}
+                label={t(`fields.users.${f.k}`, f.k)}
                 icon={<f.icon className="h-4 w-4" />}
                 type={f.type}
                 value={form[f.k]}
@@ -179,31 +233,24 @@ function ProfilePage() {
         </section>
 
         {/* Security */}
-        <section className="rounded-3xl border border-border bg-card/70 p-6 shadow-sm backdrop-blur-md sm:p-8">
+        <section className="rounded-3xl border border-border bg-card/70 p-6 shadow-sm backdrop-blur-md sm:p-8 h-fit">
           <header className="mb-6 flex items-center gap-3">
             <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
               <ShieldCheck className="h-5 w-5" />
             </span>
             <div>
-              <h2 className="text-lg font-extrabold text-start">{t("profile.security.title")}</h2>
+              <h2 className="text-lg font-extrabold text-start">{t("profile.security.title", "الأمان")}</h2>
               <p className="text-xs text-muted-foreground text-start">
-                {t("profile.security.subtitle")}
+                {t("profile.security.subtitle", "تغيير كلمة المرور الخاصة بك")}
               </p>
             </div>
           </header>
 
           <div className="space-y-4">
             <PwField
-              label={t("profile.security.current")}
-              value={pw.current}
-              onChange={(v) => setPw((p) => ({ ...p, current: v }))}
-              show={showPw}
-              onToggle={() => setShowPw((s) => !s)}
-            />
-            <PwField
-              label={t("profile.security.new")}
-              value={pw.next}
-              onChange={(v) => setPw((p) => ({ ...p, next: v }))}
+              label={t("profile.security.new", "كلمة المرور الجديدة")}
+              value={password}
+              onChange={(v) => setPassword(v)}
               show={showPw}
               onToggle={() => setShowPw((s) => !s)}
             />
@@ -225,48 +272,35 @@ function ProfilePage() {
               <p
                 className="mt-2 text-xs font-semibold text-start"
                 style={{
-                  color: pw.next ? strengthColors[Math.max(0, strength - 1)] : undefined,
+                  color: password ? strengthColors[Math.max(0, strength - 1)] : undefined,
                 }}
               >
-                {pw.next ? strengthLabels[Math.max(0, strength - 1)] : t("profile.security.tip")}
+                {password ? strengthLabels[Math.max(0, strength - 1)] : t("profile.security.tip", "اكتب كلمة مرور معقدة")}
               </p>
             </div>
-
-            <PwField
-              label={t("profile.security.confirm")}
-              value={pw.confirm}
-              onChange={(v) => setPw((p) => ({ ...p, confirm: v }))}
-              show={showPw}
-              onToggle={() => setShowPw((s) => !s)}
-            />
-
-            <button className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground transition-all hover:scale-[1.01] active:scale-[0.99]">
-              <Lock className="h-4 w-4" />
-              {t("profile.security.update")}
-            </button>
           </div>
         </section>
 
-        {/* Institutions */}
+        {/* Roles (بديلاً عن الـ Institutions الوهمية) */}
         <section className="lg:col-span-3 rounded-3xl border border-border bg-card/70 p-6 shadow-sm backdrop-blur-md sm:p-8">
           <header className="mb-6 flex items-end justify-between gap-3">
             <div>
               <h2 className="text-lg font-extrabold text-start">
-                {t("profile.institutions.title")}
+                {t("profile.roles.title", "صلاحيات الحساب")}
               </h2>
               <p className="mt-1 text-sm text-muted-foreground text-start">
-                {t("profile.institutions.subtitle")}
+                {t("profile.roles.subtitle", "المهام والصلاحيات الموكلة إليك في النظام")}
               </p>
             </div>
             <span className="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">
-              {institutions.length}
+              {user?.roles?.length || 0}
             </span>
           </header>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {institutions.map((ins, i) => (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {user?.roles?.map((role: string, i: number) => (
               <motion.article
-                key={ins.id}
+                key={role}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
@@ -280,32 +314,13 @@ function ProfilePage() {
                       "radial-gradient(circle, color-mix(in oklab, #1E5A46 70%, transparent), transparent 70%)",
                   }}
                 />
-                <div className="relative flex items-start gap-3">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                    <Building2 className="h-5 w-5" />
+                <div className="relative flex items-center gap-3">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-gold/15 text-gold">
+                    <BadgeCheck className="h-6 w-6" />
                   </span>
                   <div className="min-w-0 flex-1">
-                    <h3 className="truncate text-sm font-extrabold text-start">{ins.name}</h3>
-                    <p className="mt-0.5 text-xs text-muted-foreground text-start">
-                      {ins.city} · {t(`enums.institution_type.${ins.type}`)}
-                    </p>
+                    <h3 className="truncate text-lg font-extrabold text-start capitalize">{role}</h3>
                   </div>
-                </div>
-
-                <div className="relative mt-5 flex items-center justify-between">
-                  <span
-                    className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold ${
-                      ins.role === "admin"
-                        ? "bg-gold/15 text-[#8a6a00] dark:text-gold"
-                        : "bg-primary/10 text-primary"
-                    }`}
-                  >
-                    <BadgeCheck className="h-3.5 w-3.5" />
-                    {t(`profile.institutions.roles.${ins.role}`)}
-                  </span>
-                  <span className="text-[11px] text-muted-foreground">
-                    {t("profile.institutions.joined")}: {ins.joined}
-                  </span>
                 </div>
               </motion.article>
             ))}
@@ -331,7 +346,7 @@ function ProfileField({
   onChange: (v: string) => void;
   type?: string;
   k: FieldKey;
-  t: (k: string) => string;
+  t: (k: string, fb?: string) => string;
 }) {
   if (k === "gender") {
     return (
@@ -348,8 +363,8 @@ function ProfileField({
             onChange={(e) => onChange(e.target.value)}
             className="h-12 w-full appearance-none rounded-xl border border-border bg-background ps-10 pe-4 text-sm font-semibold text-start shadow-sm outline-none transition-all hover:border-primary/40 focus:border-primary focus:ring-4 focus:ring-primary/15"
           >
-            <option value="male">{t("enums.gender.male")}</option>
-            <option value="female">{t("enums.gender.female")}</option>
+            <option value="1">{t("enums.gender.male", "ذكر")}</option>
+            <option value="2">{t("enums.gender.female", "أنثى")}</option>
           </select>
         </div>
       </label>
@@ -368,6 +383,7 @@ function ProfileField({
           type={type}
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          dir={type === 'email' || type === 'tel' ? 'ltr' : 'auto'}
           className="h-12 w-full rounded-xl border border-border bg-background ps-10 pe-4 text-sm font-semibold text-start shadow-sm outline-none transition-all hover:border-primary/40 focus:border-primary focus:ring-4 focus:ring-primary/15"
         />
       </div>
@@ -399,6 +415,7 @@ function PwField({
           type={show ? "text" : "password"}
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          dir="ltr"
           className="h-12 w-full rounded-xl border border-border bg-background ps-10 pe-11 text-sm font-semibold text-start shadow-sm outline-none transition-all hover:border-primary/40 focus:border-primary focus:ring-4 focus:ring-primary/15"
         />
         <button

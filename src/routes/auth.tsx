@@ -1,13 +1,18 @@
+
+
+
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { Mail, Lock, User, Phone, AtSign, Cake, ArrowLeft, ArrowRight } from "lucide-react";
+import { Mail, Lock, User, Phone, AtSign, ImagePlus, ArrowLeft, ArrowRight } from "lucide-react";
 import { FloatingInput } from "@/components/floating-input";
 import { KawnLogo } from "@/components/kawn-logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import i18n from "@/i18n";
+import { toast } from "sonner";
+import { useLogin, useRegister } from "@/hooks/useAuth"; 
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -25,9 +30,25 @@ function AuthPage() {
   const { t, i18n } = useTranslation();
   const isRtl = i18n.language?.startsWith("ar");
   const [mode, setMode] = useState<Mode>("login");
-  const [gender, setGender] = useState<"male" | "female">("male");
   const navigate = useNavigate();
   const Arrow = isRtl ? ArrowLeft : ArrowRight;
+
+  const { mutate: login, isPending: isLoggingIn } = useLogin();
+  const { mutate: register, isPending: isRegistering } = useRegister();
+
+  const [loginField, setLoginField] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+
+  const [regData, setRegData] = useState({
+    first_name: "",
+    last_name: "",
+    username: "",
+    phone: "",
+    email: "",
+    password: "",
+  });
+  const [gender, setGender] = useState<1 | 2>(1); // 1 => Male, 2 => Female
+  const [avatar, setAvatar] = useState<File | null>(null);
 
   const stats = [
     { k: "1,245", l: t("auth.hero.stats.donors") },
@@ -35,8 +56,58 @@ function AuthPage() {
     { k: "12,540", l: t("auth.hero.stats.delivered") },
   ];
 
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    login(
+      { login_field: loginField, password: loginPassword },
+      {
+        onError: (error: any) => {
+          const msg = error.response?.data?.message;
+          if (msg === "Account's email Has Not Been Verified Yet, Please Verify Your Account First.") {
+            toast.warning(t("auth.unverified_warning", "حسابك غير موثق، يرجى إدخال رمز التحقق"));
+            navigate({ to: "/verify-otp", search: { login_field: loginField } });
+          } else {
+            toast.error(msg || t("auth.login_failed", "بيانات الدخول غير صحيحة"));
+          }
+        },
+      }
+    );
+  };
+
+  const handleRegister = (e: React.FormEvent) => {
+    e.preventDefault();
+    register(
+      { ...regData, gender, avatar: avatar || undefined },
+      {
+        onSuccess: () => {
+          toast.success(t("auth.register_success", "تم إنشاء الحساب بنجاح، يرجى توثيقه"));
+          navigate({ to: "/verify-otp", search: { login_field: regData.email } });
+        },
+        onError: (error: any) => {
+          const validationErrors = error.response?.data?.errors;
+          const msg = error.response?.data?.message;
+
+          if (validationErrors) {
+            const firstErrorKey = Object.keys(validationErrors)[0];
+            const firstErrorMessage = validationErrors[firstErrorKey][0];
+            toast.error(`خطأ في البيانات: ${firstErrorMessage}`);
+            
+            console.error("أخطاء الباك إند:", validationErrors);
+          } 
+          else {
+            toast.error(msg || "حدث خطأ أثناء إنشاء الحساب");
+          }
+        }
+      }
+    );
+  };
+
   return (
-    <main dir={isRtl ? "rtl" : "ltr"} className="min-h-screen bg-background text-foreground">
+    <main
+    dir="rtl"
+    className="min-h-screen bg-background text-foreground"
+    suppressHydrationWarning
+  >
       <div className="grid min-h-screen lg:grid-cols-2">
         <section className="relative flex items-center justify-center px-6 py-12 sm:px-12 lg:py-16">
           <div className="absolute top-6 end-6 flex items-center gap-3">
@@ -61,6 +132,7 @@ function AuthPage() {
                 return (
                   <button
                     key={m}
+                    type="button"
                     onClick={() => setMode(m)}
                     className="relative z-10 rounded-full px-6 py-2 text-sm font-semibold transition-colors"
                   >
@@ -72,7 +144,9 @@ function AuthPage() {
                       />
                     )}
                     <span
-                      className={`relative ${active ? "text-primary-foreground dark:text-gold-foreground" : "text-muted-foreground"}`}
+                      className={`relative ${
+                        active ? "text-primary-foreground dark:text-gold-foreground" : "text-muted-foreground"
+                      }`}
                     >
                       {t(`auth.tabs.${m}`)}
                     </span>
@@ -98,25 +172,59 @@ function AuthPage() {
 
                 <form
                   className="mt-8 space-y-4"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    navigate({ to: "/dashboard" });
-                  }}
+                  onSubmit={mode === "login" ? handleLogin : handleRegister}
                 >
                   {mode === "register" ? (
                     <>
                       <div className="grid grid-cols-2 gap-3">
-                        <FloatingInput label={t("fields.users.first_name")} icon={<User className="h-4 w-4" />} autoComplete="given-name" />
-                        <FloatingInput label={t("fields.users.last_name")} icon={<User className="h-4 w-4" />} autoComplete="family-name" />
+                        <FloatingInput
+                          label={t("fields.users.first_name")}
+                          icon={<User className="h-4 w-4" />}
+                          autoComplete="given-name"
+                          value={regData.first_name}
+                          onChange={(e) => setRegData({ ...regData, first_name: e.target.value })}
+                          required
+                        />
+                        <FloatingInput
+                          label={t("fields.users.last_name")}
+                          icon={<User className="h-4 w-4" />}
+                          autoComplete="family-name"
+                          value={regData.last_name}
+                          onChange={(e) => setRegData({ ...regData, last_name: e.target.value })}
+                          required
+                        />
                       </div>
-                      <FloatingInput label={t("fields.users.username")} icon={<AtSign className="h-4 w-4" />} autoComplete="username" />
+                      
+                      <FloatingInput
+                        label={t("fields.users.username")}
+                        icon={<AtSign className="h-4 w-4" />}
+                        autoComplete="username"
+                        value={regData.username}
+                        onChange={(e) => setRegData({ ...regData, username: e.target.value })}
+                        required
+                      />
+                      
                       <FloatingInput
                         label={t("fields.users.email")}
                         type="email"
                         icon={<Mail className="h-4 w-4" />}
                         autoComplete="email"
+                        value={regData.email}
+                        onChange={(e) => setRegData({ ...regData, email: e.target.value })}
+                        required
+                        dir="ltr"
                       />
-                      <FloatingInput label={t("fields.users.phone")} type="tel" icon={<Phone className="h-4 w-4" />} />
+                      
+                      <FloatingInput
+                        label={t("fields.users.phone")}
+                        type="tel"
+                        icon={<Phone className="h-4 w-4" />}
+                        value={regData.phone}
+                        onChange={(e) => setRegData({ ...regData, phone: e.target.value })}
+                        required
+                        dir="ltr"
+                      />
+                      
                       <div className="grid grid-cols-2 gap-3">
                         <div className="flex flex-col gap-1.5">
                           <label className="text-xs font-semibold text-muted-foreground ps-1">
@@ -124,12 +232,13 @@ function AuthPage() {
                           </label>
                           <div className="flex h-12 items-center gap-1 rounded-xl border border-border bg-card p-1">
                             {(["male", "female"] as const).map((g) => {
-                              const active = gender === g;
+                              const gValue = g === "male" ? 1 : 2;
+                              const active = gender === gValue;
                               return (
                                 <button
                                   type="button"
                                   key={g}
-                                  onClick={() => setGender(g)}
+                                  onClick={() => setGender(gValue)}
                                   className={`flex-1 rounded-lg px-2 py-1.5 text-xs font-bold transition-all ${
                                     active
                                       ? "bg-primary text-primary-foreground dark:bg-gold dark:text-gold-foreground"
@@ -142,17 +251,32 @@ function AuthPage() {
                             })}
                           </div>
                         </div>
-                        <FloatingInput
-                          label={t("fields.users.birthday")}
-                          type="date"
-                          icon={<Cake className="h-4 w-4" />}
-                        />
+                        
+                        {/* Avatar Upload (بديل حقل عيد الميلاد) */}
+                        <div className="flex flex-col gap-1.5 mt-auto">
+                          <div className="relative flex h-12 items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-card px-3 transition-colors hover:bg-muted cursor-pointer overflow-hidden">
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="absolute inset-0 z-10 w-full h-full cursor-pointer opacity-0"
+                              onChange={(e) => setAvatar(e.target.files?.[0] || null)}
+                            />
+                            <ImagePlus className="h-4 w-4 text-muted-foreground" />
+                            <span className="text-xs font-medium text-muted-foreground truncate w-full text-start">
+                              {avatar ? avatar.name : t("fields.users.avatar", "الصورة الشخصية (اختياري)")}
+                            </span>
+                          </div>
+                        </div>
                       </div>
+
                       <FloatingInput
                         label={t("fields.users.password")}
                         type="password"
                         icon={<Lock className="h-4 w-4" />}
                         autoComplete="new-password"
+                        value={regData.password}
+                        onChange={(e) => setRegData({ ...regData, password: e.target.value })}
+                        required
                       />
                     </>
                   ) : (
@@ -161,12 +285,19 @@ function AuthPage() {
                         label={t("auth.login.identifier")}
                         icon={<AtSign className="h-4 w-4" />}
                         autoComplete="username"
+                        value={loginField}
+                        onChange={(e) => setLoginField(e.target.value)}
+                        required
+                        dir="ltr"
                       />
                       <FloatingInput
                         label={t("fields.users.password")}
                         type="password"
                         icon={<Lock className="h-4 w-4" />}
                         autoComplete="current-password"
+                        value={loginPassword}
+                        onChange={(e) => setLoginPassword(e.target.value)}
+                        required
                       />
                       <div className="flex items-center justify-between text-xs">
                         <label className="inline-flex items-center gap-2 text-muted-foreground">
@@ -188,15 +319,22 @@ function AuthPage() {
 
                   <button
                     type="submit"
-                    className="group mt-2 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 text-sm font-bold tracking-wide text-primary-foreground shadow-[0_12px_30px_-12px_rgba(15,61,46,0.7)] transition-all duration-200 hover:scale-[1.02] hover:bg-primary-medium active:scale-95 dark:bg-gold dark:text-gold-foreground dark:shadow-[0_12px_30px_-12px_rgba(242,201,76,0.5)] dark:hover:bg-gold/90"
+                    disabled={isLoggingIn || isRegistering}
+                    className="group mt-2 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 text-sm font-bold tracking-wide text-primary-foreground shadow-[0_12px_30px_-12px_rgba(15,61,46,0.7)] transition-all duration-200 hover:scale-[1.02] hover:bg-primary-medium active:scale-95 disabled:opacity-70 disabled:hover:scale-100 dark:bg-gold dark:text-gold-foreground dark:shadow-[0_12px_30px_-12px_rgba(242,201,76,0.5)] dark:hover:bg-gold/90"
                   >
-                    {t(`auth.${mode}.submit`)}
-                    <Arrow className="h-4 w-4 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
+                    {isLoggingIn || isRegistering
+                      ? t("common.loading", "جاري المعالجة...")
+                      : t(`auth.${mode}.submit`)}
+                    {!(isLoggingIn || isRegistering) && (
+                      <Arrow className="h-4 w-4 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
+                    )}
                   </button>
 
                   <div className="relative my-6 flex items-center gap-3">
                     <span className="h-px flex-1 bg-border" />
-                    <span className="text-[11px] uppercase tracking-widest text-muted-foreground">{t("common.or")}</span>
+                    <span className="text-[11px] uppercase tracking-widest text-muted-foreground">
+                      {t("common.or")}
+                    </span>
                     <span className="h-px flex-1 bg-border" />
                   </div>
 
@@ -225,6 +363,7 @@ function AuthPage() {
           </div>
         </section>
 
+        {/* ... (القسم الجانبي لم يتم تعديله، يمكنك إبقاؤه كما هو) ... */}
         <section className="relative hidden overflow-hidden lg:block">
           <div className="absolute inset-0 mesh-kawn" />
           <motion.div

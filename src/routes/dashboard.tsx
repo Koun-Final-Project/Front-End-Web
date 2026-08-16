@@ -1,6 +1,10 @@
+
+
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "../lib/api/axios"; 
 import {
   HeartHandshake,
   Building2,
@@ -9,11 +13,22 @@ import {
   ArrowUpRight,
   Plus,
   Send,
+  Loader2,
 } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { StatCard } from "@/components/stat-card";
 import { RoleGate } from "@/components/role-gate";
 import i18n from "@/i18n";
+
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -28,43 +43,53 @@ export const Route = createFileRoute("/dashboard")({
 function DashboardPage() {
   const { t } = useTranslation();
 
+  const { data: statsData, isLoading } = useQuery({
+    queryKey: ["dashboard-statistics"],
+    queryFn: async () => {
+      const response = await api.get("/donation/statistics");
+      return response.data.data;
+    },
+  });
+
   const stats = [
     {
       label: t("dashboard.stats.totalDonations"),
-      value: 124530,
+      value: statsData?.total_donations || 0,
       icon: <HeartHandshake className="h-5 w-5" />,
-      delta: "+12.4%",
+      delta: "",
       accent: "gold" as const,
-      trend: [18, 22, 19, 28, 26, 34, 32, 41, 38, 46, 52, 58],
+      trend: [0, 0, 0, 0, 0],
     },
     {
       label: t("dashboard.stats.activeInstitutions"),
-      value: 248,
+      value: statsData?.active_institutions || 0,
       icon: <Building2 className="h-5 w-5" />,
-      delta: "+4.1%",
+      delta: "",
       accent: "primary" as const,
-      trend: [12, 14, 13, 16, 18, 17, 20, 22, 21, 24, 26, 28],
+      trend: [0, 0, 0, 0, 0],
     },
     {
       label: t("dashboard.stats.pendingRequests"),
-      value: 1342,
+      value: statsData?.pending_donation_requests || 0,
       icon: <FileClock className="h-5 w-5" />,
-      delta: "-2.3%",
+      delta: "",
       accent: "primary" as const,
-      trend: [30, 28, 32, 27, 25, 26, 24, 22, 25, 23, 21, 20],
+      trend: [0, 0, 0, 0, 0],
     },
     {
       label: t("dashboard.stats.delivered"),
-      value: 8732,
+      value: statsData?.delivered_donations || 0,
       icon: <PackageCheck className="h-5 w-5" />,
-      delta: "+18.7%",
+      delta: "",
       accent: "gold" as const,
-      trend: [10, 14, 18, 22, 28, 30, 36, 40, 48, 54, 62, 70],
+      trend: [0, 0, 0, 0, 0],
     },
   ];
 
   const activity = t("dashboard.activity.items", { returnObjects: true }) as { t: string; s: string }[];
   const colors = ["gold", "primary", "primary", "gold"];
+
+  const maxGraphCount = statsData?.graph ? Math.max(...statsData.graph.map((g: any) => g.count)) : 1;
 
   return (
     <AppShell>
@@ -100,13 +125,19 @@ function DashboardPage() {
         </div>
       </motion.div>
 
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
-        {stats.map((s, i) => (
-          <StatCard key={s.label} {...s} index={i} />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="flex h-32 items-center justify-center rounded-2xl border border-border bg-card">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+          {stats.map((s, i) => (
+            <StatCard key={s.label} {...s} index={i} />
+          ))}
+        </div>
+      )}
 
-      <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-3">
+      <div className="mt-8 grid grid-cols-2 gap-5 lg:grid-cols-3">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -117,10 +148,74 @@ function DashboardPage() {
             <h2 className="text-lg font-bold">{t("dashboard.chart.title")}</h2>
             <span className="text-xs text-muted-foreground">{t("dashboard.chart.range")}</span>
           </div>
-          <div className="mt-6 h-56 rounded-xl border border-dashed border-border bg-muted/40" />
+          
+          {/* 3. إنشاء المخطط البياني الديناميكي (Bar Chart) */}
+      {/* 3. إنشاء المخطط البياني الخطي المتقدم (Advanced Area Chart) */}
+      {isLoading ? (
+            <div className="mt-6 flex h-72 items-center justify-center rounded-xl border border-dashed border-border bg-muted/20">
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+            </div>
+          ) : (
+            <div className="mt-6 h-72 w-full rounded-xl border border-dashed border-border bg-muted/5 p-4 pt-6">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart
+                  data={statsData?.graph || []}
+                  margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                >
+                  {/* تعريف التدرج اللوني تحت الخط */}
+                  <defs>
+                    <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#F2C94C" stopOpacity={0.6} />
+                      <stop offset="95%" stopColor="#F2C94C" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" opacity={0.5} />
+                  
+                  <XAxis
+                    dataKey="period"
+                    tickFormatter={(val) => val.split(" - ")[0]}
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+                    dy={10}
+                  />
+                  
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+                  />
+                  
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "hsl(var(--card))",
+                      borderColor: "hsl(var(--border))",
+                      borderRadius: "12px",
+                      boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.1)",
+                    }}
+                    itemStyle={{ color: "#F2C94C", fontWeight: "bold" }}
+                    labelStyle={{ color: "hsl(var(--muted-foreground))", marginBottom: "4px" }}
+                    formatter={(value) => [value, "التبرعات"]}
+                  />
+                  
+                  <Area
+                    type="monotone"
+                    dataKey="count"
+                    stroke="#F2C94C"
+                    strokeWidth={3}
+                    fillOpacity={1}
+                    fill="url(#colorCount)"
+                    activeDot={{ r: 6, fill: "#F2C94C", stroke: "hsl(var(--background))", strokeWidth: 2 }}
+                    animationDuration={1500}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          )}
         </motion.div>
 
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
@@ -142,7 +237,7 @@ function DashboardPage() {
               </li>
             ))}
           </ul>
-        </motion.div>
+        </motion.div> */}
       </div>
     </AppShell>
   );

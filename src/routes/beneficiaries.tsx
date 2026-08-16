@@ -1,3 +1,6 @@
+
+
+
 import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
@@ -13,6 +16,7 @@ import {
   Map as MapIcon,
   HeartHandshake,
   Users,
+  Loader2,
 } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import {
@@ -23,12 +27,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useInstitutions } from "@/hooks/useInstitution";
 import i18n from "@/i18n";
 
 export const Route = createFileRoute("/beneficiaries")({
   head: () => ({
     meta: [
-      { title: i18n.t("beneficiaries.meta.title") },
+      { title: i18n.t("beneficiaries.meta.title", "المستفيدون") },
       { name: "description", content: i18n.t("beneficiaries.meta.description") },
     ],
   }),
@@ -104,7 +109,7 @@ function StatusPill({ active }: { active: boolean }) {
           active ? "bg-emerald-500 animate-pulse" : "bg-muted-foreground/50"
         }`}
       />
-      {active ? t("common.active") : t("common.inactive")}
+      {active ? t("common.active", "نشط") : t("common.inactive", "غير نشط")}
     </span>
   );
 }
@@ -124,7 +129,7 @@ function BranchCard({ b }: { b: Branch }) {
               {b.is_main_branch && (
                 <span className="inline-flex items-center gap-1 rounded-full bg-gold/20 px-2 py-0.5 text-[9px] font-bold text-[#8a6a10] dark:text-gold">
                   <Star className="h-2.5 w-2.5 fill-current" />
-                  {t("beneficiaries.mainBranchBadge")}
+                  {t("beneficiaries.mainBranchBadge", "الفرع الرئيسي")}
                 </span>
               )}
             </h5>
@@ -183,7 +188,7 @@ function BeneficiaryRow({ inst, index }: { inst: Institution; index: number }) {
         <TableCell className="w-14">
           <button
             onClick={() => setOpen((v) => !v)}
-            aria-label={open ? t("beneficiaries.collapse") : t("beneficiaries.expand")}
+            aria-label={open ? t("beneficiaries.collapse", "طي") : t("beneficiaries.expand", "توسيع")}
             className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition-all hover:border-gold hover:text-foreground focus:outline-none focus:ring-4 focus:ring-gold/25"
           >
             <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.2 }}>
@@ -261,17 +266,23 @@ function BeneficiaryRow({ inst, index }: { inst: Institution; index: number }) {
                   <div className="mb-4 flex items-center gap-2">
                     <span className="h-1.5 w-6 rounded-full bg-gold" />
                     <h4 className="text-sm font-extrabold">
-                      {t("beneficiaries.branchesTitle")}
+                      {t("beneficiaries.branchesTitle", "فروع المؤسسة")}
                     </h4>
                     <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-bold text-muted-foreground">
                       {inst.branches.length}
                     </span>
                   </div>
-                  <div className="grid gap-3 md:grid-cols-2">
-                    {inst.branches.map((b) => (
-                      <BranchCard key={b.id} b={b} />
-                    ))}
-                  </div>
+                  {inst.branches.length === 0 ? (
+                     <div className="rounded-xl border border-dashed border-border bg-background/50 py-6 text-center text-sm text-muted-foreground">
+                       لا توجد فروع مضافة لهذه المؤسسة حالياً.
+                     </div>
+                  ) : (
+                    <div className="grid gap-3 md:grid-cols-2">
+                      {inst.branches.map((b) => (
+                        <BranchCard key={b.id} b={b} />
+                      ))}
+                    </div>
+                  )}
                 </div>
               </motion.div>
             </TableCell>
@@ -287,8 +298,42 @@ function BeneficiariesPage() {
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState<"all" | "active" | "inactive">("all");
 
-  const all = t("institutions.list", { returnObjects: true }) as Institution[];
-  const beneficiaries = useMemo(() => all.filter((i) => i.type === 2), [all]);
+  const { data: apiData, isLoading } = useInstitutions();
+
+  const allInstitutions: Institution[] = useMemo(() => {
+    const rawInstitutions = Array.isArray(apiData?.data?.items) ? apiData.data.items : Array.isArray(apiData?.data) ? apiData.data : Array.isArray(apiData) ? apiData : [];
+    
+    return rawInstitutions.map((inst: any) => ({
+      id: String(inst.id),
+      name: inst.name || "بدون اسم",
+      description: inst.description || "",
+      logo: inst.logo || null,
+      owner: inst.owner ? `${inst.owner.first_name} ${inst.owner.last_name}` : "غير محدد",
+      email: inst.email || "-",
+      phone: inst.phone || "-",
+      type: (Number(inst.type) || 2) as 1 | 2 | 3,
+      is_active: inst.is_active === true || inst.is_active === 1,
+      attachments: inst.attachments || [],
+      branches: (inst.branches || []).map((b: any) => ({
+        id: String(b.id),
+        name: b.name || "فرع",
+        description: b.description || "",
+        email: b.email || "-",
+        phone: b.phone || "-",
+        is_main_branch: b.is_main_branch === true || b.is_main_branch === 1,
+        address: {
+          city: b.address?.city || "غير محدد",
+          state: b.address?.state || "-",
+          street: b.address?.street || "-",
+          latitude: Number(b.address?.latitude) || 0,
+          longitude: Number(b.address?.longitude) || 0,
+          details: b.address?.details || "",
+        }
+      }))
+    }));
+  }, [apiData]);
+
+  const beneficiaries = useMemo(() => allInstitutions.filter((i) => i.type === 2 || i.type === 3), [allInstitutions]);
 
   const filtered = beneficiaries.filter((i) => {
     const q = query.toLowerCase();
@@ -310,9 +355,9 @@ function BeneficiariesPage() {
   } as const;
 
   const tabs: { key: "all" | "active" | "inactive"; label: string; n: number }[] = [
-    { key: "all", label: t("beneficiaries.tabs.all"), n: counts.all },
-    { key: "active", label: t("beneficiaries.tabs.active"), n: counts.active },
-    { key: "inactive", label: t("beneficiaries.tabs.inactive"), n: counts.inactive },
+    { key: "all", label: t("beneficiaries.tabs.all", "الكل"), n: counts.all },
+    { key: "active", label: t("beneficiaries.tabs.active", "نشط"), n: counts.active },
+    { key: "inactive", label: t("beneficiaries.tabs.inactive", "غير نشط"), n: counts.inactive },
   ];
 
   return (
@@ -321,13 +366,13 @@ function BeneficiariesPage() {
         <div>
           <p className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-gold">
             <HeartHandshake className="h-3.5 w-3.5" />
-            {t("beneficiaries.eyebrow")}
+            {t("beneficiaries.eyebrow", "شركاء الخير")}
           </p>
           <h1 className="mt-2 text-3xl font-extrabold tracking-tight">
-            {t("beneficiaries.title")}
+            {t("beneficiaries.title", "قائمة المستفيدين")}
           </h1>
           <p className="mt-1.5 text-sm text-muted-foreground">
-            {t("beneficiaries.subtitle")}
+            {t("beneficiaries.subtitle", "تصفح الجمعيات الخيرية والمؤسسات المستفيدة المعتمدة")}
           </p>
         </div>
         <div className="flex items-center gap-3 self-start rounded-2xl border border-border bg-card px-4 py-2.5 shadow-sm">
@@ -336,7 +381,7 @@ function BeneficiariesPage() {
           </span>
           <div>
             <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-              {t("beneficiaries.totalLabel")}
+              {t("beneficiaries.totalLabel", "إجمالي المستفيدين")}
             </p>
             <p className="text-lg font-extrabold leading-none">{counts.all}</p>
           </div>
@@ -349,7 +394,7 @@ function BeneficiariesPage() {
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder={t("beneficiaries.searchPlaceholder")}
+            placeholder={t("beneficiaries.searchPlaceholder", "ابحث بالاسم، المدينة، أو البريد...")}
             className="h-11 w-full rounded-xl border border-border bg-background ps-10 pe-4 text-sm outline-none transition-all placeholder:text-muted-foreground focus:border-gold focus:ring-4 focus:ring-gold/15"
           />
         </div>
@@ -390,19 +435,26 @@ function BeneficiariesPage() {
             <TableRow className="bg-muted/40 hover:bg-muted/40">
               <TableHead className="w-14" />
               <TableHead className="text-start">
-                {t("beneficiaries.columns.institution")}
+                {t("beneficiaries.columns.institution", "المؤسسة")}
               </TableHead>
-              <TableHead className="text-start">{t("beneficiaries.columns.email")}</TableHead>
-              <TableHead className="text-start">{t("beneficiaries.columns.phone")}</TableHead>
-              <TableHead className="text-start">{t("beneficiaries.columns.city")}</TableHead>
-              <TableHead className="text-start">{t("beneficiaries.columns.status")}</TableHead>
+              <TableHead className="text-start">{t("beneficiaries.columns.email", "البريد الإلكتروني")}</TableHead>
+              <TableHead className="text-start">{t("beneficiaries.columns.phone", "رقم الهاتف")}</TableHead>
+              <TableHead className="text-start">{t("beneficiaries.columns.city", "المدينة")}</TableHead>
+              <TableHead className="text-start">{t("beneficiaries.columns.status", "الحالة")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filtered.length === 0 ? (
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={6} className="py-16 text-center">
+                  <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" />
+                  <p className="mt-3 text-sm font-semibold text-muted-foreground">جاري جلب المستفيدين...</p>
+                </TableCell>
+              </TableRow>
+            ) : filtered.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="py-10 text-center text-sm text-muted-foreground">
-                  {t("beneficiaries.empty")}
+                  {t("beneficiaries.empty", "لا يوجد مستفيدين مطابقين لبحثك حالياً")}
                 </TableCell>
               </TableRow>
             ) : (
